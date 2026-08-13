@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blog—ERH—V2.0.0"
+  short_description: "Generate verified ERH English Shopify blog packages"
+  default_prompt: "Use $blog-erh-v2-0-0 to research and create a source-backed ERH English blog with images, internal links, and a Shopify-ready local draft."
