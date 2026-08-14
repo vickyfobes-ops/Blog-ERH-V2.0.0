@@ -1,4 +1,5 @@
 interface:
   display_name: "Blog—ERH—V2.0.0"
-  short_description: "Generate verified ERH English Shopify blog packages"
-  default_prompt: "Use $blog-erh-v2-0-0 to research and create a source-backed ERH English blog with images, internal links, and a Shopify-ready local draft."
+  short_description: "Create, review, and publish verified ERH Shopify blogs"
+  brand_color: "#8A6847"
+  default_prompt: "Use $blog-erh-v2-0-0 for this English topic: How to Choose a Custom Range Hood."

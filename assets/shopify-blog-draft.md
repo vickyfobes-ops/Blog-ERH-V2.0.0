@@ -1,23 +1,23 @@
 ---
 title: "[Final H1]"
 handle: "[lowercase-hyphenated-handle]"
-author: "[Approved public author or team]"
+author: "YMQ"
+blog: "News"
 blog_handle: "news"
-tags:
-  - "[Controlled cluster tag]"
-seo_title: "[45–60 characters when practical]"
-seo_description: "[140–160 characters when practical]"
-primary_keyword: "[One primary query]"
+theme_template: "Default blog post"
+tags: []
+seo_title: "[45–60 characters]"
+seo_description: "[140–160 characters]"
+primary_keyword: "[one query]"
 search_intent: "[Informational / Commercial investigation / Transactional]"
-cluster: "[Primary cluster]"
+cluster: "[primary cluster]"
 funnel_stage: "[Awareness / Consideration / Decision / Ownership]"
-excerpt: "[One or two sentences distinct from the meta description.]"
-status: "draft"
+excerpt: "[One or two sentences distinct from meta description.]"
+visibility: "hidden"
 publish_at: null
 featured_image:
-  source: "[Approved ERH asset path or URL]"
-  alt: "[Describe the visible image and relevant context]"
-target_page: "[Verified collection/product/contact/sample URL]"
+  source: "[approved image path]"
+  alt: "[factual visible description]"
 review_date: "[YYYY-MM-DD]"
 ---
 
@@ -28,114 +28,84 @@ review_date: "[YYYY-MM-DD]"
 - Unique ERH evidence:
 - Facts requiring verification:
 - Primary sources:
-- Existing-page cannibalization result:
-- Internal links out:
-- Back-links to add from existing pages:
-- Image/diagram plan:
+- Cannibalization result:
+- Two or more target product pages:
+- Other contextual internal links:
+- Reverse-link tasks:
+- Six-image plan:
 - Primary CTA:
 
-## Shopify body HTML
+## English source structure
 
-```html
-<p>[Open with a direct, useful answer to the reader’s question. Do not repeat the H1 in the body.]</p>
+```markdown
+# [Final H1 — source only]
 
-<p>[Set context, name the key variables, and explain what the reader will be able to decide or do.]</p>
+[Direct answer within the first 100–150 words.]
 
-<h2>[First decision or explanation]</h2>
+![Featured image alt](images/[featured-file])
+*[Design-visualization disclosure/caption when generated.]*
 
-<p>[Evidence-based explanation with a contextual internal link where useful.]</p>
+## [First section]
 
-<figure>
-  <img src="[approved-image-url]" alt="[descriptive alt text]">
-  <figcaption>[Optional factual caption.]</figcaption>
-</figure>
+[Body with contextual verified ERH links.]
 
-<h2>[At-a-glance comparison or calculation]</h2>
+![Body image 2 alt](images/[body-file])
+*[Decision-oriented caption.]*
 
-<table>
-  <thead>
-    <tr>
-      <th scope="col">[Variable]</th>
-      <th scope="col">[Option A]</th>
-      <th scope="col">[Option B]</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">[Criterion]</th>
-      <td>[Accurate value or guidance]</td>
-      <td>[Accurate value or guidance]</td>
-    </tr>
-  </tbody>
-</table>
+## [Additional sections]
 
-<h2>[Step-by-step section when applicable]</h2>
+[Use short paragraphs and parallel lists. Add five body images across the article.]
 
-<ol>
-  <li><strong>[Step name]:</strong> [Instruction and reason.]</li>
-  <li><strong>[Step name]:</strong> [Instruction and reason.]</li>
-  <li><strong>[Step name]:</strong> [Instruction and reason.]</li>
-</ol>
+## Sources and Technical References
 
-<h2>[Common mistakes or trade-offs]</h2>
+- [Primary authority source](https://authority.example)
 
-<ul>
-  <li><strong>[Mistake]:</strong> [Consequence and correction.]</li>
-  <li><strong>[Mistake]:</strong> [Consequence and correction.]</li>
-</ul>
+## Frequently Asked Questions
 
-<aside>
-  <p><strong>Planning note:</strong> [For clearance, ductwork, CFM, electrical work, structural support, gas ventilation, or code: point to the verified ERH manual and recommend an appropriately licensed professional.]</p>
-</aside>
+### [Question?]
 
-<h2>Frequently Asked Questions</h2>
-
-<h3>[Natural follow-up question?]</h3>
-<p>[Concise answer; link to the deeper supporting page if one exists.]</p>
-
-<h3>[Natural follow-up question?]</h3>
-<p>[Concise answer.]</p>
-
-<h2>[Outcome-oriented closing heading]</h2>
-
-<p>[Summarize the decision without repeating the introduction.]</p>
-
-<p>[Primary CTA with one verified link, such as browsing the relevant ERH collection, ordering samples, or requesting design help.]</p>
+[Concise answer.]
 ```
 
-## Internal-link plan
+## Shopify body pattern
 
-| Placement | Anchor text | Verified target URL | Target type | Reader need |
-|---|---|---|---|---|
-| Intro/early body |  |  | Pillar/support |  |
-| Main decision section |  |  | Collection/product |  |
-| Technical/care note |  |  | Manual/care/support |  |
-| Closing CTA |  |  | Samples/contact/collection |  |
+```html
+<p>[Direct answer; do not repeat H1.]</p>
+<p><em>[Generated-visual disclosure.]</em></p>
 
-## Back-link tasks
+<h4>[Markdown H2 section]</h4>
+<p>[Evidence-based explanation.]</p>
+<p><a href="https://eliterangehood.com/products/[verified-handle]" style="color:#000000;text-decoration:underline;">[descriptive product anchor]</a></p>
 
-| Existing verified URL | Suggested anchor | Insertion context | Priority |
-|---|---|---|---|
-|  |  |  | High |
-|  |  |  | Medium |
+<p><img src="SHOPIFY_IMAGE_2_URL" alt="[factual alt]" width="1536" height="1024" loading="lazy"></p>
+<p><em>[Caption.]</em></p>
 
-## Source log
+<h4>Sources and Technical References</h4>
+<ul>
+  <li><a href="[primary-source-url]">[Source title]</a></li>
+</ul>
 
-| Claim | Source URL | Publisher | Published/updated | Accessed | Notes |
-|---|---|---|---|---|---|
-|  |  |  |  |  |  |
+<h4>Frequently Asked Questions</h4>
+<h5>[Question?]</h5>
+<p>[Answer.]</p>
+```
+
+## Review gate
+
+- [ ] English article, Chinese Word review, SEO fields, and six images are complete.
+- [ ] User revisions have been applied.
+- [ ] No Shopify publication authorization has been inferred.
+- [ ] Exact phrase `审核通过并发布` is still required for Visible publication.
 
 ## Final QA
 
-- [ ] One clear intent; no unresolved cannibalization.
-- [ ] Opening directly answers the query.
-- [ ] All ERH product claims match current approved facts.
-- [ ] Volatile, technical, health, safety, legal and price claims are current and sourced.
-- [ ] No competitor wording, examples or images were copied.
-- [ ] No duplicate H1 inside `body_html`.
-- [ ] Heading levels, lists, table headers and link anchors are semantic.
-- [ ] Images are approved and have descriptive alt text.
-- [ ] Internal links resolve to verified canonical URLs.
-- [ ] At least two back-link tasks are included when practical.
-- [ ] SEO title, description, handle and excerpt are complete.
-- [ ] `status` remains `draft` unless the user explicitly authorizes publishing.
+- [ ] Search intent answered immediately.
+- [ ] Current ERH facts and primary authority sources verified.
+- [ ] Competitor wording and images not copied.
+- [ ] No H1 inside Shopify body HTML.
+- [ ] Markdown H2/H3 mapped to Shopify H4/H5.
+- [ ] One featured image plus five body images; all alt text present.
+- [ ] At least two current product-detail links are black and underlined.
+- [ ] External sources remain in the final reference section.
+- [ ] SEO title, description, handle, excerpt, tags, and CTA are complete.
+- [ ] Hidden for testing, or exact publication approval recorded.
