@@ -1,6 +1,6 @@
 ---
 name: blog-erh-v2-0-0
-description: "Run the preconfigured Elite Range Hood Shopify blog workflow from one English topic: research and generate the complete English article, meaning-matched Chinese Word review copy, SEO metadata, Shopify-safe layout, and exactly six images; pause for human review; then, after the exact approval phrase, verify and insert at least two live ERH product-detail links, upload through the operator's signed-in Chrome, publish, and verify the public article and homepage. Use when an operator invokes $blog-erh-v2-0-0, asks for an ERH blog package, or says 审核通过并发布 for the current reviewed package. The fixed store profile works on supported Windows and macOS Codex desktop apps and never requires a Shopify API key or custom app."
+description: "Run the preconfigured Elite Range Hood Shopify blog workflow from one English topic: research and generate the complete English article, meaning-matched Chinese Word review copy, SEO metadata, Shopify-safe layout, and exactly six images; pause for human review; then, after the exact approval phrase, verify and insert at least two live Elite Range Hood product-detail links, upload through the operator's signed-in Chrome, publish, and verify the public article and homepage. Use when an operator invokes $blog-erh-v2-0-0, asks for an Elite Range Hood blog package, or says 审核通过并发布 for the current reviewed package. The fixed store profile works on supported Windows and macOS Codex desktop apps and never requires a Shopify API key or custom app."
 ---
 
 # Blog—ERH—V2.0.0
@@ -38,7 +38,7 @@ If neither Chrome control nor Computer Use is available, complete the local revi
 
 ## First run on another operator's computer
 
-Installation carries the fixed non-secret ERH store profile, content rules, scripts, and upload runbook. It does not and must not carry authentication.
+Installation carries the fixed non-secret Elite Range Hood store profile, content rules, scripts, and upload runbook. It does not and must not carry authentication.
 
 Before the first Shopify write:
 
@@ -57,14 +57,21 @@ Accept a plain English title or topic after `$blog-erh-v2-0-0`. If specific enou
 
 ### Research and write
 
-1. Check current ERH articles for intent overlap.
-2. Verify relevant live ERH product pages and current product facts.
+1. Check current Elite Range Hood articles for intent overlap.
+2. Verify relevant live Elite Range Hood product pages and current product facts.
 3. Verify volatile, technical, health, safety, code, cost, policy, and specification claims with current primary sources.
 4. Write a formal US-English article that answers the buyer's main question in its first 100–150 words.
 5. Create a complete meaning-matched Chinese version; do not summarize.
 6. Keep external authority links in the final visible `Sources and Technical References` section.
-7. Never invent ERH dimensions, CFM, noise, pricing, lead time, warranty, certifications, materials, mounting, or care claims.
+7. Never invent Elite Range Hood dimensions, CFM, noise, pricing, lead time, warranty, certifications, materials, mounting, or care claims.
 8. Mark natural product-link insertion points but never guess a product URL.
+
+### Brand naming
+
+- Write the public brand name exactly as `Elite Range Hood` in every customer-facing English or Chinese deliverable.
+- Do not publish the abbreviation `ERH` in article copy, headings, SEO title, meta description, excerpt, CTA, anchor text, image alt text, captions, Word review copy, Shopify body HTML, or public article fields.
+- Allow `ERH` only inside the existing Skill/repository name, internal filenames, internal audit IDs, and technical schema identifiers. Never let those internal identifiers leak into customer-facing copy.
+- Run the bundled validator and replace every forbidden standalone abbreviation before review or Shopify upload.
 
 ### Generate six images
 
@@ -87,7 +94,7 @@ Create a topic-specific output directory containing:
 - Chinese Word review document;
 - SEO title, description, handle, excerpt, tags, intent, cluster, funnel, and CTA;
 - exactly six reviewed image files;
-- local ERH-theme preview;
+- local Elite Range Hood theme preview;
 - Shopify-safe body HTML;
 - source log, internal-link plan, publication manifest, and validation report.
 

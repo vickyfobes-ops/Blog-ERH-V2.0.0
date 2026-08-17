@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replace ERH body-image placeholders with uploaded Shopify CDN URLs."""
+"""Replace Elite Range Hood body-image placeholders with uploaded Shopify CDN URLs."""
 
 from __future__ import annotations
 

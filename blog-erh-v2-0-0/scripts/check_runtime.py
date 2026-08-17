@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check cross-platform local dependencies used by the ERH Skill."""
+"""Check cross-platform local dependencies used by the Elite Range Hood Skill."""
 
 from __future__ import annotations
 

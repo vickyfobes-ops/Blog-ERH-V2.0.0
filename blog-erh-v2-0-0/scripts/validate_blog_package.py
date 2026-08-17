@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate an ERH V2 review, hidden-draft, or publication package."""
+"""Validate an Elite Range Hood V2 review, hidden-draft, or publication package."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ from PIL import Image
 
 ALLOWED_TAGS = {"h4", "h5", "p", "ul", "ol", "li", "strong", "em", "a", "img", "blockquote", "br", "hr", "code"}
 PRODUCT_STYLE = "color:#000000;text-decoration:underline;"
+FORBIDDEN_PUBLIC_BRAND_ABBREVIATION = re.compile(r"(?<![A-Za-z0-9_-])ERH(?![A-Za-z0-9_-])")
 
 
 class ArticleParser(HTMLParser):
@@ -117,13 +118,16 @@ def main() -> int:
         if image.get("width") or image.get("height"):
             errors.append(
                 f"Body image {number} must not use fixed width/height attributes; "
-                "the ERH theme constrains width without resetting height"
+                "the Elite Range Hood theme constrains width without resetting height"
             )
 
     product_links = [link for link in article.links if is_product(link.get("href", ""))]
     distinct_products = sorted({link.get("href", "") for link in product_links})
     if len(distinct_products) < 2:
-        errors.append(f"Expected at least two distinct ERH product-detail links; found {len(distinct_products)}")
+        errors.append(
+            f"Expected at least two distinct Elite Range Hood product-detail links; "
+            f"found {len(distinct_products)}"
+        )
     for link in product_links:
         if link.get("style") != PRODUCT_STYLE:
             errors.append(f"Product link lacks approved black-underlined style: {link.get('href', '')}")
@@ -140,8 +144,32 @@ def main() -> int:
     if not 130 <= meta_description_chars <= 165:
         errors.append("Meta description should contain 130–165 characters")
 
+    public_brand_surfaces = {
+        "English Markdown": markdown,
+        "Shopify body HTML": body_html,
+        "final H1": str(meta.get("finalH1", "")),
+        "SEO title": str(seo.get("title", "")),
+        "meta description": str(seo.get("metaDescription", "")),
+        "excerpt": str(seo.get("excerpt", "")),
+        "Shopify title": str(publish.get("title", "")),
+        "Shopify SEO title": str(publish.get("seoTitle", "")),
+        "Shopify meta description": str(publish.get("metaDescription", "")),
+        "Shopify excerpt": str(publish.get("excerpt", "")),
+    }
+    chinese_markdown_path = root / f"{slug}.zh-CN.md"
+    if chinese_markdown_path.is_file():
+        public_brand_surfaces["Chinese review Markdown"] = chinese_markdown_path.read_text(encoding="utf-8")
+    forbidden_brand_findings: dict[str, int] = {}
+    for label, value in public_brand_surfaces.items():
+        count = len(FORBIDDEN_PUBLIC_BRAND_ABBREVIATION.findall(value))
+        if count:
+            forbidden_brand_findings[label] = count
+            errors.append(
+                f"Use 'Elite Range Hood' instead of standalone 'ERH' in {label}; found {count} occurrence(s)"
+            )
+
     if publish.get("storeHandle") != "97256c-fc":
-        errors.append("Shopify store handle is not the configured ERH store")
+        errors.append("Shopify store handle is not the configured Elite Range Hood store")
     if publish.get("blog") != "News" or publish.get("blogHandle") != "news":
         errors.append("Target blog must be News/news")
     if publish.get("author") != "YMQ":
@@ -164,6 +192,11 @@ def main() -> int:
         expected_role = "featured image" if index == 1 else "body image"
         if record.get("role") != expected_role:
             errors.append(f"Image manifest position {index} must use role {expected_role!r}")
+        alt_text = str(record.get("alt", ""))
+        if FORBIDDEN_PUBLIC_BRAND_ABBREVIATION.search(alt_text):
+            label = f"image {index} alt text"
+            forbidden_brand_findings[label] = len(FORBIDDEN_PUBLIC_BRAND_ABBREVIATION.findall(alt_text))
+            errors.append(f"Use 'Elite Range Hood' instead of standalone 'ERH' in {label}")
         path = root / str(record.get("uploadFile", ""))
         if not path.is_file():
             errors.append(f"Missing optimized image: {path}")
@@ -217,6 +250,7 @@ def main() -> int:
                 featured_dimensions
                 and featured_dimensions["width"] == featured_dimensions["height"] * 2
             ),
+            "forbiddenBrandAbbreviationFindings": forbidden_brand_findings,
             "distinctProductLinks": len(distinct_products),
             "styledProductLinks": sum(link.get("style") == PRODUCT_STYLE for link in product_links),
             "authoritySources": len(meta.get("researchSources", [])),

@@ -1,4 +1,4 @@
-# ERH Shopify output contract
+# Elite Range Hood Shopify output contract
 
 ## Article fields
 
@@ -25,14 +25,14 @@ backlink_tasks: []
 
 The default online state is `Hidden`. Visible publication requires the exact phrase `审核通过并发布` for the current reviewed package.
 
-## ERH live-theme body HTML
+## Elite Range Hood live-theme body HTML
 
 - Do not include the article H1; the theme renders the title.
 - Map Markdown H2 sections to `<h4>` and Markdown H3 subsections or FAQ questions to `<h5>`.
 - Use `<p>`, `<h4>`, `<h5>`, `<ul>`, `<ol>`, `<li>`, `<strong>`, `<em>`, `<a>`, and plain `<p><img ...></p>`.
-- Avoid `<figure>`, `<figcaption>`, and tables by default because the verified ERH reference article does not establish those layouts.
+- Avoid `<figure>`, `<figcaption>`, and tables by default because the verified Elite Range Hood reference article does not establish those layouts.
 - Do not include scripts, Liquid, iframes, embedded style sheets, tracking code, or inline event handlers.
-- The only default inline style exception is a verified ERH product-detail link. It must use exactly `style="color:#000000;text-decoration:underline;"`.
+- The only default inline style exception is a verified Elite Range Hood product-detail link. It must use exactly `style="color:#000000;text-decoration:underline;"`.
 - Keep visible FAQs in the article when the intent supports them. Do not add FAQ JSON-LD unless duplicate schema is ruled out.
 - Do not link competitors in customer-facing content.
 
@@ -46,7 +46,13 @@ The default online state is `Hidden`. Visible publication requires the exact phr
 
 ## External authority sources
 
-Keep necessary primary external sources in a final visible `<h4>Sources and Technical References</h4>` section. In-body citations are acceptable when they directly support a technical statement, but ERH links should dominate ordinary navigation and commercial CTAs.
+Keep necessary primary external sources in a final visible `<h4>Sources and Technical References</h4>` section. In-body citations are acceptable when they directly support a technical statement, but Elite Range Hood links should dominate ordinary navigation and commercial CTAs.
+
+## Brand-name validation
+
+- Use `Elite Range Hood` everywhere the public brand is named.
+- Reject standalone `ERH` in the English article, Chinese review copy, title, SEO title, meta description, excerpt, CTA, anchor text, image alt text, captions, and final Shopify HTML.
+- Internal Skill names, repository paths, audit IDs, and technical schema identifiers are exempt because customers do not see them.
 
 ## Images
 

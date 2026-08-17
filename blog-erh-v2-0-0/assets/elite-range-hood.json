@@ -1,6 +1,8 @@
 {
   "schemaVersion": "2.0.0",
   "brand": "Elite Range Hood",
+  "publicBrandName": "Elite Range Hood",
+  "customerFacingAbbreviationAllowed": false,
   "productionDomain": "eliterangehood.com",
   "shopifyStoreHandle": "97256c-fc",
   "shopifyPermanentDomain": "97256c-fc.myshopify.com",

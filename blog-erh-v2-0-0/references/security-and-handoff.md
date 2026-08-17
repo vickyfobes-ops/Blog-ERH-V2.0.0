@@ -2,7 +2,7 @@
 
 ## Included in the portable Skill
 
-- Public ERH storefront and non-secret Shopify store identifiers.
+- Public Elite Range Hood storefront and non-secret Shopify store identifiers.
 - Fixed `News` destination, approved author, theme formatting, and homepage module.
 - Research, writing, translation, SEO, image, product-link, layout, validation, upload, publication, and verification rules.
 - Cross-platform scripts and Windows/macOS browser-control setup.

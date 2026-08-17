@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a theme-aligned ERH Shopify package from six-image Markdown."""
+"""Build a theme-aligned Elite Range Hood Shopify package from six-image Markdown."""
 
 from __future__ import annotations
 
@@ -23,6 +23,7 @@ INLINE_RE = re.compile(
 PRODUCT_LINK_STYLE = "color:#000000;text-decoration:underline;"
 FEATURED_ASPECT_WIDTH = 2
 FEATURED_ASPECT_HEIGHT = 1
+FORBIDDEN_PUBLIC_BRAND_ABBREVIATION = re.compile(r"(?<![A-Za-z0-9_-])ERH(?![A-Za-z0-9_-])")
 
 
 def is_erh_product(url: str) -> bool:
@@ -79,7 +80,7 @@ def optimize_images(root: Path, records: list[tuple[str, str]]) -> list[dict]:
                 )
             if index > 1 and width <= height:
                 raise ValueError(
-                    f"ERH body images must be landscape-oriented; "
+                    f"Elite Range Hood body images must be landscape-oriented; "
                     f"found {width}x{height}: {relative_path}"
                 )
             rgb.save(target, "WEBP", quality=82, method=6)
@@ -168,7 +169,10 @@ def markdown_to_shopify(markdown: str, images: list[dict]) -> str:
             output.extend(f"  <li>{render_inline(item)}</li>" for item in items)
             output.append(f"</{tag}>")
         elif stripped.startswith("|"):
-            raise ValueError("ERH live-theme output does not use Markdown tables by default; rewrite as a list")
+            raise ValueError(
+                "Elite Range Hood live-theme output does not use Markdown tables by default; "
+                "rewrite as a list"
+            )
         elif caption:
             flush()
             output.append(f"<p><em>{render_inline(caption.group(1))}</em></p>")
@@ -193,7 +197,7 @@ def build_preview(body_html: str, meta: dict, manifest: list[dict]) -> str:
     hero = manifest[0]
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{title} — ERH local preview</title>
+<title>{title} — Elite Range Hood local preview</title>
 <style>
 *{{box-sizing:border-box}} body{{margin:0;background:#fbf8ef;color:#3b3933;font:16px/28px Arial,sans-serif}}
 .band{{background:#f1eee2;padding:42px 24px 0}} .crumb,.hero{{display:block;max-width:1140px;margin:auto}} .crumb{{padding-bottom:28px;font-size:13px}}
@@ -221,6 +225,23 @@ def main() -> int:
     slug = markdown_path.stem
     meta = json.loads((root / f"{slug}.meta.json").read_text(encoding="utf-8"))
     markdown = markdown_path.read_text(encoding="utf-8")
+    public_brand_surfaces = {
+        "English Markdown": markdown,
+        "final H1": str(meta.get("finalH1", "")),
+        "SEO title": str(meta.get("seo", {}).get("title", "")),
+        "meta description": str(meta.get("seo", {}).get("metaDescription", "")),
+        "excerpt": str(meta.get("seo", {}).get("excerpt", "")),
+    }
+    forbidden_surfaces = [
+        label
+        for label, value in public_brand_surfaces.items()
+        if FORBIDDEN_PUBLIC_BRAND_ABBREVIATION.search(value)
+    ]
+    if forbidden_surfaces:
+        raise ValueError(
+            "Use the full public brand name 'Elite Range Hood'; standalone 'ERH' is forbidden in: "
+            + ", ".join(forbidden_surfaces)
+        )
     image_records = re.findall(r"!\[([^\]]*)\]\(([^)]+)\)", markdown)
     if len(image_records) != 6 or any(not alt.strip() for alt, _ in image_records):
         raise ValueError("Exactly six images with non-empty alt text are required")

@@ -1,6 +1,6 @@
 # Operator setup for Windows and macOS
 
-This is a one-time setup for each operator computer. The Skill already contains the fixed ERH store profile and does not require a Shopify custom app or API key.
+This is a one-time setup for each operator computer. The Skill already contains the fixed Elite Range Hood store profile and does not require a Shopify custom app or API key.
 
 ## Install the Skill
 

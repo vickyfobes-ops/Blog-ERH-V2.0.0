@@ -25,7 +25,7 @@ review_date: "[YYYY-MM-DD]"
 
 - Direct answer:
 - Audience problem:
-- Unique ERH evidence:
+- Unique Elite Range Hood evidence:
 - Facts requiring verification:
 - Primary sources:
 - Cannibalization result:
@@ -47,7 +47,7 @@ review_date: "[YYYY-MM-DD]"
 
 ## [First section]
 
-[Body with contextual verified ERH links.]
+[Body with contextual verified Elite Range Hood links.]
 
 ![Body image 2 alt](images/[body-file])
 *[Decision-oriented caption.]*
@@ -100,7 +100,7 @@ review_date: "[YYYY-MM-DD]"
 ## Final QA
 
 - [ ] Search intent answered immediately.
-- [ ] Current ERH facts and primary authority sources verified.
+- [ ] Current Elite Range Hood facts and primary authority sources verified.
 - [ ] Competitor wording and images not copied.
 - [ ] No H1 inside Shopify body HTML.
 - [ ] Markdown H2/H3 mapped to Shopify H4/H5.

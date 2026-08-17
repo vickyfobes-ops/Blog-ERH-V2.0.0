@@ -51,6 +51,9 @@ def main() -> int:
         else:
             expected = {
                 "schemaVersion": "2.0.0",
+                "brand": "Elite Range Hood",
+                "publicBrandName": "Elite Range Hood",
+                "customerFacingAbbreviationAllowed": False,
                 "productionDomain": "eliterangehood.com",
                 "shopifyStoreHandle": "97256c-fc",
                 "targetBlog": "News",
@@ -77,6 +80,7 @@ def main() -> int:
         "color:#000000;text-decoration:underline;",
         "exact `2:1` ratio",
         "never create a second article",
+        "Do not publish the abbreviation `ERH`",
     ):
         if required_text not in skill_text:
             errors.append(f"SKILL.md is missing required portable workflow text: {required_text}")

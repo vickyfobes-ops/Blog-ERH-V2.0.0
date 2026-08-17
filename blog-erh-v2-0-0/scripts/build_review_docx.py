@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build polished ERH English and Chinese Word review drafts from Markdown."""
+"""Build polished Elite Range Hood English and Chinese Word review drafts from Markdown."""
 
 from __future__ import annotations
 
@@ -317,7 +317,11 @@ def configure_page(document, title: str, language: str, font_name: str, east_asi
     header_p = section.header.paragraphs[0]
     header_p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     header_p.paragraph_format.space_after = Pt(0)
-    label = "ERH SHOPIFY BLOG · 中文审阅稿" if language.startswith("zh") else "ERH SHOPIFY BLOG · REVIEW DRAFT"
+    label = (
+        "ELITE RANGE HOOD SHOPIFY BLOG · 中文审阅稿"
+        if language.startswith("zh")
+        else "ELITE RANGE HOOD SHOPIFY BLOG · REVIEW DRAFT"
+    )
     run = header_p.add_run(label)
     set_font(run, font_name, 8.5, MUTED, bold=True, east_asia=east_asia)
     ppr = header_p._p.get_or_add_pPr()
@@ -510,7 +514,7 @@ def build(markdown_path: Path, meta_path: Path, output_path: Path, language: str
     flush()
 
     document.core_properties.title = title
-    document.core_properties.subject = "ERH Shopify blog review draft"
+    document.core_properties.subject = "Elite Range Hood Shopify blog review draft"
     document.core_properties.author = "Elite Range Hood"
     document.core_properties.comments = "Review draft; not uploaded to Shopify."
     output_path.parent.mkdir(parents=True, exist_ok=True)

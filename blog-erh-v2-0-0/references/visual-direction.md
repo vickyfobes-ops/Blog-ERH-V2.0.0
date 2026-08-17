@@ -1,4 +1,4 @@
-# ERH editorial visual direction
+# Elite Range Hood editorial visual direction
 
 ## Default image system
 
@@ -21,14 +21,14 @@ Unless the user explicitly requests a technical illustration, do not generate:
 - transparent or missing shells;
 - exploded assemblies;
 - exposed ducts, blowers, motors, filters, wires, or fabricated inner chambers;
-- anatomy labels or engineering details that are not documented by the exact ERH product;
+- anatomy labels or engineering details that are not documented by the exact Elite Range Hood product;
 - a competitor logo, watermark, product photo, or distinctive composition.
 
 ## Product references
 
-Inspect current ERH product pages or approved ERH images before describing or visualizing a named model. Use competitor sites only to understand category presentation and market conventions, never as a source of ERH facts or image assets.
+Inspect current Elite Range Hood product pages or approved Elite Range Hood images before describing or visualizing a named model. Use competitor sites only to understand category presentation and market conventions, never as a source of Elite Range Hood facts or image assets.
 
-If a generated hood only references an exterior profile, say so. Do not call it the exact model or customer project. Do not imply that a generated kitchen is an installed ERH project.
+If a generated hood only references an exterior profile, say so. Do not call it the exact model or customer project. Do not imply that a generated kitchen is an installed Elite Range Hood project.
 
 ## Standard six-image package
 
@@ -45,7 +45,7 @@ Vary kitchen style, cabinetry color, materials, and lighting while maintaining a
 
 ## Featured-image frame and crop safety
 
-The current ERH article card and blog hero use a wide source. Produce the final featured asset at an exact `2:1` pixel ratio; `1774 × 887` is the verified reference size. Do not upload a portrait, square, or approximate landscape image and rely on Shopify cropping.
+The current Elite Range Hood article card and blog hero use a wide source. Produce the final featured asset at an exact `2:1` pixel ratio; `1774 × 887` is the verified reference size. Do not upload a portrait, square, or approximate landscape image and rely on Shopify cropping.
 
 Keep these decision-critical elements inside the full `2:1` frame:
 
@@ -67,7 +67,7 @@ Inspect each final file at full frame before review and inspect the rendered art
 - the hood geometry is plausible and structurally consistent;
 - crowns, aprons, straps, rivets, cabinet doors, ranges, and hardware are not malformed;
 - no hood, appliance, drawing, sample, or other essential element is unintentionally cropped;
-- no competitor logo, watermark, copied product image, or misleading ERH-project claim appears;
+- no competitor logo, watermark, copied product image, or misleading Elite Range Hood project claim appears;
 - the six images add distinct information rather than repeating one room or silhouette.
 
 ## Disclosure and captions
@@ -78,7 +78,7 @@ Include one clear early disclosure when generated visuals are used, for example:
 
 Use captions to explain the decision the image supports. Avoid promotional filler. Example:
 
-`Copper finish visualization in a warm natural-material kitchen; use physical ERH samples to approve actual color, texture, and finish behavior.`
+`Copper finish visualization in a warm natural-material kitchen; use physical Elite Range Hood samples to approve actual color, texture, and finish behavior.`
 
 ## Alt text
 
