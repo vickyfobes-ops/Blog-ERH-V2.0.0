@@ -6,14 +6,14 @@ This is a one-time setup for each operator computer. The Skill already contains 
 
 Canonical repository: `https://github.com/vickyfobes-ops/Blog-ERH-V2.0.0`
 
-Ask Codex to use `$skill-installer` with repository `vickyfobes-ops/Blog-ERH-V2.0.0`, path `.`, branch `main`, and installation name `blog-erh-v2-0-0`. The repository root is the Skill root.
+Ask Codex to use `$skill-installer` with repository `vickyfobes-ops/Blog-ERH-V2.0.0`, path `blog-erh-v2-0-0`, branch `main`, and installation name `blog-erh-v2-0-0`.
 
 The deterministic macOS/Linux installer command is:
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo vickyfobes-ops/Blog-ERH-V2.0.0 \
-  --path . \
+  --path blog-erh-v2-0-0 \
   --ref main \
   --name blog-erh-v2-0-0
 ```
