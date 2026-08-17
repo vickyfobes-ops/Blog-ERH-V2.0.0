@@ -21,6 +21,8 @@ INLINE_RE = re.compile(
     r"`([^`]+)`"
 )
 PRODUCT_LINK_STYLE = "color:#000000;text-decoration:underline;"
+FEATURED_ASPECT_WIDTH = 2
+FEATURED_ASPECT_HEIGHT = 1
 
 
 def is_erh_product(url: str) -> bool:
@@ -69,8 +71,18 @@ def optimize_images(root: Path, records: list[tuple[str, str]]) -> list[dict]:
         target = web_dir / optimized_name(index, source)
         with Image.open(source) as image:
             rgb = image.convert("RGB")
-            rgb.save(target, "WEBP", quality=82, method=6)
             width, height = rgb.size
+            if index == 1 and width * FEATURED_ASPECT_HEIGHT != height * FEATURED_ASPECT_WIDTH:
+                raise ValueError(
+                    f"Featured image must be exact 2:1 before Shopify upload; "
+                    f"found {width}x{height}: {relative_path}"
+                )
+            if index > 1 and width <= height:
+                raise ValueError(
+                    f"ERH body images must be landscape-oriented; "
+                    f"found {width}x{height}: {relative_path}"
+                )
+            rgb.save(target, "WEBP", quality=82, method=6)
         manifest.append({
             "order": index,
             "source": str(source.relative_to(root)),
@@ -136,7 +148,7 @@ def markdown_to_shopify(markdown: str, images: list[dict]) -> str:
                     '<p><img '
                     f'src="SHOPIFY_IMAGE_{image_index}_URL" '
                     f'alt="{html.escape(record["alt"], quote=True)}" '
-                    f'width="{record["width"]}" height="{record["height"]}" loading="lazy"></p>'
+                    'loading="lazy"></p>'
                 )
                 if caption_text:
                     output.append(f"<p><em>{render_inline(caption_text)}</em></p>")
@@ -245,6 +257,9 @@ def main() -> int:
             "url": "https://eliterangehood.com/blogs/news/the-value-of-handmade-in-a-mass-produced-world",
             "desktopHeroWidthPx": 1140,
             "desktopBodyWidthPx": 760,
+            "featuredAspectRatio": "2:1",
+            "featuredReferenceSizePx": {"width": 1774, "height": 887},
+            "bodyImageSizing": "responsive-natural-height",
             "bodyHeadingMap": {"markdownH2": "shopifyH4", "markdownH3": "shopifyH5"},
         },
         "expectedPublicUrl": f'https://eliterangehood.com/blogs/news/{seo["handle"]}',

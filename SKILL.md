@@ -1,128 +1,137 @@
 ---
 name: blog-erh-v2-0-0
-description: Generate, review, illustrate, internally link, upload, and verify source-backed English Shopify blog posts for Elite Range Hood (ERH). Use when the user invokes $blog-erh-v2-0-0, supplies an English ERH blog topic, requests an English formal article with a Chinese Word review copy and six images, or says “审核通过并发布” for the reviewed ERH package. Use the user's logged-in Chrome Shopify session, never API keys or passwords. Create hidden drafts by default and publish only after the exact approval phrase.
+description: "Run the preconfigured Elite Range Hood Shopify blog workflow from one English topic: research and generate the complete English article, meaning-matched Chinese Word review copy, SEO metadata, Shopify-safe layout, and exactly six images; pause for human review; then, after the exact approval phrase, verify and insert at least two live ERH product-detail links, upload through the operator's signed-in Chrome, publish, and verify the public article and homepage. Use when an operator invokes $blog-erh-v2-0-0, asks for an ERH blog package, or says 审核通过并发布 for the current reviewed package. The fixed store profile works on supported Windows and macOS Codex desktop apps and never requires a Shopify API key or custom app."
 ---
 
 # Blog—ERH—V2.0.0
 
-Create original ERH blogs that are ready for the live Elite Range Hood theme, while keeping research, review, Shopify drafting, and publication as separate states.
+Operate the fixed Elite Range Hood workflow as three user-visible outcomes:
 
-## Non-negotiable boundaries
+1. The operator inputs one English topic.
+2. Generate and present the complete article review package.
+3. After exact approval, automatically add verified product links, format, upload, publish, and verify.
 
-- Work only for `eliterangehood.com` and the Shopify store recorded in `references/site-config.md`.
-- Do not modify Blog—FSE—V3.0.0 or any other Skill.
-- Use the user's currently logged-in Chrome session for Shopify. Do not request or store a Shopify API key, password, cookie, token, or 2FA code.
-- Stop only for Shopify login, 2FA, insufficient permission, CAPTCHA confirmation, or a genuine inability to find two relevant live ERH product pages.
-- Never publish or schedule without the exact user phrase `审核通过并发布` for the current reviewed package.
-- First-time configuration and any ordinary unapproved online test must remain `Hidden`.
-- Do not edit a different existing Shopify article unless the user explicitly identifies and authorizes it.
+Do not expose research, image generation, link discovery, HTML conversion, image upload, or verification as extra operator steps. Do not ask the operator to configure the store again.
 
-## Load memory
+## Load the fixed profile
 
 Read these for every run:
 
+- `assets/elite-range-hood.json`
 - `references/site-config.md`
 - `references/brand-facts-and-guardrails.md`
 - `references/shopify-output-contract.md`
 
-Read as needed:
+Read `references/operator-setup.md` on a new computer or when browser control is unavailable. Read `references/shopify-browser-workflow.md` before any Shopify action. Read `references/security-and-handoff.md` before packaging or handing the Skill to another operator.
 
-- `references/content-model.md` for topic choice, cannibalization, clusters, or links.
-- `references/source-audit.md` for competitor research; never use it as ERH product truth.
-- `references/visual-direction.md` before generating or selecting images.
-- `references/shopify-browser-workflow.md` before any Shopify browser action.
-- `references/mind-map.md` for strategy, roadmap, or system memory.
-- `assets/shopify-blog-draft.md` for the standard delivery structure.
+## Required capabilities and routing
 
-## Operator workflow
+- Use internet research for current facts and authoritative sources.
+- Use `imagegen` for exactly six original images.
+- Use `documents` for the Chinese Word review artifact when available; use `scripts/build_review_docx.py` as the deterministic fallback.
+- Prefer `chrome:control-chrome` for Shopify because it reuses the operator's authorized Chrome session.
+- If Chrome control is unavailable but Computer Use is installed, use Computer Use to operate Chrome visually.
+- On Windows, keep Chrome visible on the active unlocked desktop while Computer Use runs. On macOS, follow the permissions requested by Computer Use.
+- Never switch to API-key automation, request credentials, inspect cookies, or export a browser profile.
 
-### Action 1 — Receive one English topic
+If neither Chrome control nor Computer Use is available, complete the local review package, then stop with the precise setup steps from `references/operator-setup.md`. Never claim that an upload occurred.
 
-Accept a plain English topic after `$blog-erh-v2-0-0`. Infer audience, intent, cluster, funnel, and primary CTA from current evidence. Ask only when a missing choice would materially change the article.
+## First run on another operator's computer
 
-Before writing:
+Installation carries the fixed non-secret ERH store profile, content rules, scripts, and upload runbook. It does not and must not carry authentication.
 
-1. Search existing ERH articles and workspace topics for intent overlap.
-2. Verify current ERH product facts and relevant product detail pages.
+Before the first Shopify write:
+
+1. Run `scripts/check_runtime.py` with the available workspace Python runtime.
+2. Confirm the Chrome/Computer Use plugin is enabled.
+3. Confirm the ChatGPT Chrome extension is installed in the active Chrome profile and file-URL access is enabled for image uploads.
+4. Let the operator sign in to Shopify and complete password, 2FA, or CAPTCHA themselves.
+5. Confirm the visible store handle is `97256c-fc`, the public domain is `eliterangehood.com`, and the target blog is `News`.
+6. Use a Hidden draft for the first online test unless the current reviewed package has the exact publication approval.
+
+Do not ask for a Shopify API key, OpenAI API key, password, cookie, token, or custom application.
+
+## Action 1 — Input one topic and generate
+
+Accept a plain English title or topic after `$blog-erh-v2-0-0`. If specific enough, start immediately.
+
+### Research and write
+
+1. Check current ERH articles for intent overlap.
+2. Verify relevant live ERH product pages and current product facts.
 3. Verify volatile, technical, health, safety, code, cost, policy, and specification claims with current primary sources.
-4. Prepare the brief, outline, link plan, reverse-link plan, source plan, and six-image plan.
+4. Write a formal US-English article that answers the buyer's main question in its first 100–150 words.
+5. Create a complete meaning-matched Chinese version; do not summarize.
+6. Keep external authority links in the final visible `Sources and Technical References` section.
+7. Never invent ERH dimensions, CFM, noise, pricing, lead time, warranty, certifications, materials, mounting, or care claims.
+8. Mark natural product-link insertion points but never guess a product URL.
 
-### Action 2 — Produce the review package and wait
+### Generate six images
 
-Create all of these before asking for approval:
+- Generate exactly one featured image and five body images.
+- Follow `references/visual-direction.md`.
+- Lock each body image to a specific article section and reader decision before generation. Do not fill the package with generic kitchens or near-duplicate hood views.
+- Build the featured source at an exact `2:1` ratio. Keep the complete hood crown, body, lower apron, cooktop or range, and the article's essential planning context inside the safe frame; never depend on Shopify to repair a vertical or tightly cropped composition.
+- Default to exterior silhouette, finish, proportion, and craftsmanship. Do not show a cutaway, exposed internals, or invented engineering construction unless the operator explicitly requests a documented technical illustration.
+- Reject malformed, unsafe, near-duplicate, or misleading generated images.
+- Visually inspect all six source files before review and inspect the Shopify-rendered featured crop and five responsive body images after save.
+- Disclose generated kitchens as design visualizations.
+- Save accurate alt text for every image.
 
-- one formal US-English article;
-- one Chinese `.docx` review copy containing the translated article, SEO fields, image captions, source notes, and review status;
-- SEO title, meta description, handle, excerpt, tags, intent, cluster, funnel, and CTA;
-- exactly six relevant images: one featured image and five body images;
-- a local ERH-theme preview and Shopify-safe body HTML;
-- a publication manifest and deterministic validation report.
+### Produce the review package
 
-The English article must directly answer the search intent in its first 100–150 words. Generated kitchens must be disclosed as design visualizations. Keep external authority links in a visible `Sources and Technical References` section. Customer-facing body links should prioritize ERH destinations.
+Create a topic-specific output directory containing:
 
-At the end of Action 2, report the files and wait. Do not interpret comments, revisions, or “looks good” as publication approval.
+- English Markdown article;
+- complete Chinese Markdown article;
+- Chinese Word review document;
+- SEO title, description, handle, excerpt, tags, intent, cluster, funnel, and CTA;
+- exactly six reviewed image files;
+- local ERH-theme preview;
+- Shopify-safe body HTML;
+- source log, internal-link plan, publication manifest, and validation report.
 
-### Action 3 — Exact approval phrase
+Use the bundled scripts with the available cross-platform Python runtime. Prefer the workspace dependency runtime when available. On Windows, `py -3` or `python` may replace `python3`; do not make the operator run commands that Codex can run itself.
 
-Only `审核通过并发布` authorizes publication of the currently reviewed package.
+Present the article, Word document, SEO information, sources, images, preview, and validation result. Then wait.
 
-After that phrase:
+## Action 2 — Human review
 
-1. Reopen `references/site-config.md` and the reviewed manifest.
-2. Reverify the store, `News` blog, article handle, author, featured image, visibility, and at least two relevant live ERH product detail pages.
-3. Add or confirm at least two contextual links whose targets are `/products/...` pages on `eliterangehood.com`. Do not count collection, page, or blog URLs as product links.
-4. Render each product link black and underlined using exactly `style="color:#000000;text-decoration:underline;"` unless the live theme configuration recorded in site memory provides an approved equivalent.
-5. Upload the six images to Shopify, replace all body-image placeholders with Shopify-hosted URLs, and run final HTML/link checks.
-6. Set the approved author and `News` blog. Confirm the article is the reviewed package, then make it visible and save.
-7. Reopen the public article and verify the title, featured image, five body images, headings, sources, FAQ when present, product links, SEO handle, and mobile-readable flow.
-8. Open every inserted product link and confirm it lands on the intended live product detail page.
-9. Verify the homepage `Blogs` module shows the new article normally. If the homepage module has a fixed five-card limit, confirm the new article appears in the current ordering.
+Apply requested content, source, image, SEO, link-placement, or layout revisions. Regenerate affected artifacts. Comments such as “可以” or “看起来不错” do not authorize publication.
 
-Do not leave a partially published article without reporting its exact state and URL.
+Only the exact phrase `审核通过并发布` authorizes visible publication of the current reviewed package. Approval freezes the reviewed article, authority sources, and six images. Any material editorial change after approval returns to review.
 
-## Shopify hidden-draft test
+For a narrowly scoped correction to an already published article, such as “replace the featured image” or “fix the crop,” change only the requested field. Preserve the verified article ID, body, body images, links, SEO fields, author, blog, template, and visibility unless the operator explicitly expands the scope. A correction never authorizes creation of a duplicate article.
 
-When the user explicitly requests first-time configuration testing, an online write is authorized only as a Hidden draft:
+## Action 3 — Automatic Shopify delivery
 
-- upload the six approved test images;
-- create a new post in the configured `News` blog;
-- select the approved author recorded in site memory;
-- set Visibility to `Hidden` before saving;
-- save, reopen, and verify the draft fields and preview when Shopify provides one;
-- verify that the hidden draft does not appear in the public homepage `Blogs` module;
-- record the Shopify article ID, admin URL, visibility, and test time locally.
+After `审核通过并发布`:
 
-This test does not authorize publication.
+1. Read `references/shopify-browser-workflow.md` completely.
+2. Reconfirm the current package, store `97256c-fc`, blog `News`, author `YMQ`, template, title, handle, and six reviewed images. Search by recorded Shopify article ID first, then exact handle and title. Update the verified article when it exists; never create a second article for the same package.
+3. Discover current products from the storefront, product sitemap, or Shopify admin.
+4. Open and verify at least two genuinely relevant live `https://eliterangehood.com/products/...` pages and record their visible H1 titles.
+5. Insert at least two distinct contextual product links. Collections, pages, blogs, searches, previews, redirects, guessed URLs, and admin URLs do not count.
+6. Style counted links exactly as `style="color:#000000;text-decoration:underline;"`.
+7. Preserve reviewed authority sources unchanged.
+8. Build and validate Shopify-safe HTML. Fix every validation error before any save.
+9. Upload the one featured image and five body images through Shopify. Select by exact filename, verify the selected thumbnail and alt text before confirming, replace local placeholders with Shopify-hosted HTTPS URLs, and rerun validation.
+10. Fill title, body, excerpt, author, blog, tags, SEO title, meta description, handle, template, and visibility.
+11. Publish, save, reopen, and confirm that all fields persisted.
+12. Open the public article; verify layout, six images, sources, product links, SEO handle, and mobile-readable flow. Confirm the `2:1` featured source renders without losing the hood crown, lower apron, cooking appliance, or other decision-critical content, and confirm body images keep their natural aspect ratios.
+13. Click every counted product link and confirm the intended live product page.
+14. Confirm the homepage `Blogs` module displays the new article normally.
 
-## Writing and originality
+Continue autonomously through Action 3. Stop only for login, password, 2FA, CAPTCHA, insufficient Shopify permission, unavailable browser control, or fewer than two relevant live product pages. Never weaken the product-link minimum.
 
-- Use natural professional American English and short mobile-friendly paragraphs.
-- Treat the hood as ventilation equipment, an architectural proportion tool, and handcrafted metalwork.
-- Use one H1 in Markdown; omit H1 from Shopify body HTML because the theme renders the article title.
-- Match the live ERH body hierarchy recorded in site memory: Markdown H2 → Shopify H4, Markdown H3 → Shopify H5.
-- Do not copy a competitor's wording, examples, distinctive sequence, product facts, images, or layouts.
-- Do not invent ERH dimensions, metal grades, CFM, noise, price, lead time, warranty, certification, origin, mounting, or care claims.
+## Validation and completion
 
-## Images
+Use:
 
-Follow `references/visual-direction.md`. Default to rich residential interiors and exterior form or craftsmanship. Do not create cutaways, transparent shells, internal blowers, ducts, exploded assemblies, or fabricated engineering anatomy. Use current ERH pages to understand exterior geometry; never present a generated scene as customer photography or an exact installed SKU.
+- `scripts/build_review_docx.py` for Word review output when needed;
+- `scripts/check_runtime.py` for first-run cross-platform dependency checks;
+- `scripts/build_shopify_bundle.py` to build optimized WebP assets, preview, manifest, and initial HTML;
+- `scripts/finalize_shopify_images.py` after Shopify provides hosted image URLs;
+- `scripts/validate_blog_package.py` before Shopify save and again before publication.
 
-## Package and validation
-
-Use `scripts/build_shopify_bundle.py` to build the theme-aligned HTML, six WebP assets, local preview, and manifest. Use `scripts/finalize_shopify_images.py` after Shopify returns image URLs. Use `scripts/validate_blog_package.py` before any Shopify save and again before publication.
-
-The validator supplements, but does not replace, fact checking and visual inspection.
-
-## Required handoff
-
-Always state:
-
-- files created and their absolute paths;
-- validation results;
-- verified product URLs;
-- Shopify article state: local only, Hidden draft, Visible, or scheduled;
-- whether a Shopify write occurred;
-- draft/admin/public URL when available;
-- any homepage or product-link verification result.
-
-Never describe a local package or Hidden draft as published.
+Always report absolute artifact paths, validation results, verified product URLs, unchanged authority sources, Shopify article state, admin/public URLs, product-link click results, and homepage result. Never describe a local package or Hidden draft as published.

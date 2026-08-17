@@ -10,6 +10,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 
+from PIL import Image
+
 
 ALLOWED_TAGS = {"h4", "h5", "p", "ul", "ol", "li", "strong", "em", "a", "img", "blockquote", "br", "hr", "code"}
 PRODUCT_STYLE = "color:#000000;text-decoration:underline;"
@@ -112,6 +114,11 @@ def main() -> int:
             errors.append(f"Unexpected image placeholder at body position {number}")
         if not image.get("alt", "").strip():
             errors.append(f"Body image {number} has no alt text")
+        if image.get("width") or image.get("height"):
+            errors.append(
+                f"Body image {number} must not use fixed width/height attributes; "
+                "the ERH theme constrains width without resetting height"
+            )
 
     product_links = [link for link in article.links if is_product(link.get("href", ""))]
     distinct_products = sorted({link.get("href", "") for link in product_links})
@@ -150,7 +157,13 @@ def main() -> int:
     if len(image_manifest) != 6:
         errors.append(f"Expected six manifest images; found {len(image_manifest)}")
     optimized_bytes = 0
-    for record in image_manifest:
+    featured_dimensions: dict[str, int] = {}
+    for index, record in enumerate(image_manifest, start=1):
+        if record.get("order") != index:
+            errors.append(f"Image manifest position {index} has unexpected order {record.get('order')!r}")
+        expected_role = "featured image" if index == 1 else "body image"
+        if record.get("role") != expected_role:
+            errors.append(f"Image manifest position {index} must use role {expected_role!r}")
         path = root / str(record.get("uploadFile", ""))
         if not path.is_file():
             errors.append(f"Missing optimized image: {path}")
@@ -158,6 +171,34 @@ def main() -> int:
         optimized_bytes += path.stat().st_size
         if path.stat().st_size >= 300_000:
             errors.append(f"Optimized image exceeds 300 KB: {path.name}")
+        try:
+            with Image.open(path) as image:
+                actual_width, actual_height = image.size
+        except OSError as exc:
+            errors.append(f"Unreadable optimized image {path.name}: {exc}")
+            continue
+        manifest_width = record.get("width")
+        manifest_height = record.get("height")
+        if (manifest_width, manifest_height) != (actual_width, actual_height):
+            errors.append(
+                f"Image dimensions do not match manifest for {path.name}: "
+                f"manifest={manifest_width}x{manifest_height}, actual={actual_width}x{actual_height}"
+            )
+        if index == 1:
+            featured_dimensions = {"width": actual_width, "height": actual_height}
+            if actual_width != actual_height * 2:
+                errors.append(
+                    f"Featured image must be exact 2:1; found {actual_width}x{actual_height}: {path.name}"
+                )
+        elif actual_width <= actual_height:
+            errors.append(
+                f"Body image {index} must be landscape-oriented; "
+                f"found {actual_width}x{actual_height}: {path.name}"
+            )
+
+    layout_reference = publish.get("layoutReference", {})
+    if layout_reference and layout_reference.get("featuredAspectRatio") not in {None, "2:1"}:
+        errors.append("Publication layout reference must use featuredAspectRatio 2:1")
 
     report = {
         "schemaVersion": "erh-blog-validation-2.0.0",
@@ -171,6 +212,11 @@ def main() -> int:
             "shopifyH5": article.tags.count("h5"),
             "bodyImages": len(article.images),
             "manifestImages": len(image_manifest),
+            "featuredImageDimensions": featured_dimensions,
+            "featuredImageExact2to1": bool(
+                featured_dimensions
+                and featured_dimensions["width"] == featured_dimensions["height"] * 2
+            ),
             "distinctProductLinks": len(distinct_products),
             "styledProductLinks": sum(link.get("style") == PRODUCT_STYLE for link in product_links),
             "authoritySources": len(meta.get("researchSources", [])),

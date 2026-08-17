@@ -52,8 +52,12 @@ Keep necessary primary external sources in a final visible `<h4>Sources and Tech
 
 - Exactly six images per standard package: one featured image plus five body images.
 - The featured image is stored in Shopify's article image field and is not repeated in body HTML.
+- The final featured source must be exactly `2:1`; `1774 × 887` is the verified reference size for the current theme.
+- The featured safe frame must contain the complete hood crown, body, lower apron, cooking appliance, and any article-specific planning material. Do not rely on Shopify crop controls to rescue the composition.
+- Every body image must support a named article section and use responsive natural height. Do not output fixed `width` or `height` attributes on body-image tags.
 - Final body HTML must use Shopify-hosted HTTPS URLs; no local paths or unresolved placeholders.
 - Each image requires a factual alt text. Generated kitchens require a visible design-visualization disclosure.
+- Before review and after Shopify save, visually verify the full frame, product geometry, crop, and section relevance of all six images.
 
 ## Local deliverables
 
@@ -69,6 +73,7 @@ Keep necessary primary external sources in a final visible `<h4>Sources and Tech
 - Confirm no handle collision.
 - Confirm store `97256c-fc`, blog `News`, author `YMQ`, and template `Default blog post`.
 - Confirm exactly one featured image and five body images.
+- Confirm the featured image is exact `2:1`, essential content is not cropped, and body images have no fixed dimensions.
 - Confirm two or more live product-detail links with the approved style.
 - Confirm all authority sources, alt text, disclosure, CTA, and SEO fields.
 - Confirm no duplicate H1 or unresolved image placeholder.

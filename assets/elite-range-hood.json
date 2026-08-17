@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "2.0.0",
+  "brand": "Elite Range Hood",
+  "productionDomain": "eliterangehood.com",
+  "shopifyStoreHandle": "97256c-fc",
+  "shopifyPermanentDomain": "97256c-fc.myshopify.com",
+  "shopifyAdminRoot": "https://admin.shopify.com/store/97256c-fc",
+  "targetBlog": "News",
+  "targetBlogHandle": "news",
+  "defaultAuthor": "YMQ",
+  "themeTemplate": "Default blog post",
+  "homepageModule": "Blogs",
+  "minimumProductLinks": 2,
+  "imageCount": 6,
+  "featuredImageAspectRatio": "2:1",
+  "featuredImageReferenceWidth": 1774,
+  "featuredImageReferenceHeight": 887,
+  "bodyImageFixedDimensionsAllowed": false,
+  "existingArticleUpdateMode": "update-by-verified-article-id",
+  "publicationApprovalPhrase": "审核通过并发布"
+}

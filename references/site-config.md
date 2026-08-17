@@ -30,10 +30,12 @@ Reference article: `https://eliterangehood.com/blogs/news/the-value-of-handmade-
 
 - The theme renders breadcrumb, featured image, author/date, article title, share controls, footer metadata, and previous/next navigation.
 - Desktop featured-image width observed: about 1140 px.
+- Current article hero/card presentation was reverified on 2026-08-17 with an exact `2:1` featured source. `1774 × 887` rendered without losing the hood crown, lower apron, range, or planning materials. Treat this ratio as the required source contract until the theme changes.
 - Desktop body width observed: about 760 px.
 - Article title is theme-rendered, not repeated in body HTML.
 - Existing body section headings are H4; nested FAQ headings should use H5.
 - Use plain `<p><img ...></p>` for body images; the current article pattern does not depend on `<figure>` or inline tables.
+- Omit fixed `width` and `height` attributes from body-image tags; the theme constrains width and the browser must preserve natural height.
 - Keep external authority sources in a final visible `Sources and Technical References` section.
 
 ## Homepage blog module

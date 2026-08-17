@@ -32,7 +32,7 @@ If a generated hood only references an exterior profile, say so. Do not call it 
 
 ## Standard six-image package
 
-For a full buying or design guide, prefer:
+Before generation, map each image to one named article section, one reader question, and one caption. Reject any image whose only purpose is decoration. For a full buying or design guide, prefer:
 
 1. Featured image: complete aspirational kitchen with the article's primary hood concept.
 2. Proportion scene: another kitchen illustrating visual scale or mounting context.
@@ -42,6 +42,33 @@ For a full buying or design guide, prefer:
 6. Craft scene: a full kitchen where straps, rivets, apron, crown, hammering, or trim can be inspected.
 
 Vary kitchen style, cabinetry color, materials, and lighting while maintaining a coherent premium residential aesthetic. Avoid six near-duplicate rooms.
+
+## Featured-image frame and crop safety
+
+The current ERH article card and blog hero use a wide source. Produce the final featured asset at an exact `2:1` pixel ratio; `1774 × 887` is the verified reference size. Do not upload a portrait, square, or approximate landscape image and rely on Shopify cropping.
+
+Keep these decision-critical elements inside the full `2:1` frame:
+
+- the entire hood crown or top termination;
+- the complete exterior body and lower apron;
+- the cooktop or range below it;
+- the cabinetry or wall context needed to judge scale;
+- any sample board, drawing, or planning material that makes the image relevant to the article.
+
+Leave comfortable space around the hood. Do not place the crown, apron, or appliance against the frame edge. If the source cannot fit without losing an essential element, regenerate the composition. A technically complete file that visually cuts off the product still fails review.
+
+Body images should be landscape-oriented and must retain their natural aspect ratio in Shopify. Body HTML must not include fixed `width` or `height` attributes.
+
+## Visual QA
+
+Inspect each final file at full frame before review and inspect the rendered article after Shopify save. Confirm:
+
+- the image supports its assigned section and caption;
+- the hood geometry is plausible and structurally consistent;
+- crowns, aprons, straps, rivets, cabinet doors, ranges, and hardware are not malformed;
+- no hood, appliance, drawing, sample, or other essential element is unintentionally cropped;
+- no competitor logo, watermark, copied product image, or misleading ERH-project claim appears;
+- the six images add distinct information rather than repeating one room or silhouette.
 
 ## Disclosure and captions
 
