@@ -9,6 +9,8 @@ import re
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
+from xml.etree import ElementTree as ET
+from zipfile import BadZipFile, ZipFile
 
 from PIL import Image
 
@@ -16,6 +18,15 @@ from PIL import Image
 ALLOWED_TAGS = {"h4", "h5", "p", "ul", "ol", "li", "strong", "em", "a", "img", "blockquote", "br", "hr", "code"}
 PRODUCT_STYLE = "color:#000000;text-decoration:underline;"
 FORBIDDEN_PUBLIC_BRAND_ABBREVIATION = re.compile(r"(?<![A-Za-z0-9_-])ERH(?![A-Za-z0-9_-])")
+IMAGE_COUNT = 3
+BODY_IMAGE_COUNT = 2
+FEATURED_WIDTH = 1774
+FEATURED_HEIGHT = 887
+BODY_WIDTH = 1536
+BODY_HEIGHT = 1024
+WORD_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+REL_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
+DRAWING_NS = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
 
 
 class ArticleParser(HTMLParser):
@@ -54,6 +65,35 @@ def is_product(url: str) -> bool:
     return host(url) == "eliterangehood.com" and parsed.path.startswith("/products/")
 
 
+def inspect_word(path: Path) -> dict:
+    try:
+        with ZipFile(path) as archive:
+            media = [name for name in archive.namelist() if name.startswith("word/media/")]
+            document = ET.fromstring(archive.read("word/document.xml"))
+            relationships = ET.fromstring(archive.read("word/_rels/document.xml.rels"))
+    except (BadZipFile, KeyError, ET.ParseError) as exc:
+        return {"error": f"Unreadable Word document {path.name}: {exc}"}
+
+    hyperlink_urls = []
+    for relationship in relationships.findall(f"{{{REL_NS}}}Relationship"):
+        if relationship.attrib.get("Type", "").endswith("/hyperlink"):
+            hyperlink_urls.append(relationship.attrib.get("Target", ""))
+    text = " ".join(
+        node.text or "" for node in document.iter(f"{{{WORD_NS}}}t")
+    )
+    alt_texts = [
+        node.attrib.get("descr", "").strip()
+        for node in document.iter(f"{{{DRAWING_NS}}}docPr")
+    ]
+    return {
+        "mediaCount": len(media),
+        "hyperlinkCount": len(hyperlink_urls),
+        "productUrls": sorted({url for url in hyperlink_urls if is_product(url)}),
+        "missingImageAlt": sum(not value for value in alt_texts),
+        "forbiddenBrandAbbreviation": len(FORBIDDEN_PUBLIC_BRAND_ABBREVIATION.findall(text)),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dir", required=True, type=Path)
@@ -65,6 +105,8 @@ def main() -> int:
         "markdown": root / f"{slug}.md",
         "meta": root / f"{slug}.meta.json",
         "publish": root / f"{slug}.publish.json",
+        "word": root / f"{slug}.review.docx",
+        "chineseWord": root / f"{slug}.zh-CN.review.docx",
     }
     errors = [f"Missing {label}: {path}" for label, path in paths.items() if not path.is_file()]
     if errors:
@@ -101,11 +143,21 @@ def main() -> int:
         errors.append("Visible Sources and Technical References section is missing")
     if re.search(r"<(script|style|iframe|figure|figcaption|table)\b|\{[%{]", body_html, flags=re.I):
         errors.append("Unapproved script/style/iframe/figure/table/Liquid content found")
-    if body_html.count("AI-generated design visualizations") < 1:
+    image_source_type = str(publish.get("imageSourceType", ""))
+    allowed_image_source_types = {
+        "approved-real-project-photography",
+        "mixed-approved-and-generated",
+        "ai-generated-design-visualizations",
+    }
+    if image_source_type not in allowed_image_source_types:
+        errors.append("Publication manifest has an invalid or missing imageSourceType")
+    if "generated" in image_source_type.lower() and not re.search(
+        r"AI-generated design visualization", body_html, flags=re.I
+    ):
         errors.append("Generated-image disclosure is missing")
 
-    if len(article.images) != 5:
-        errors.append(f"Expected five body images; found {len(article.images)}")
+    if len(article.images) != BODY_IMAGE_COUNT:
+        errors.append(f"Expected two body images; found {len(article.images)}")
     final_state = publish.get("state") in {"ready-for-hidden-shopify-draft", "shopify-hidden-draft-created", "published"}
     for number, image in enumerate(article.images, start=2):
         src = image.get("src", "")
@@ -132,10 +184,55 @@ def main() -> int:
         if link.get("style") != PRODUCT_STYLE:
             errors.append(f"Product link lacks approved black-underlined style: {link.get('href', '')}")
 
+    word_checks: dict[str, dict] = {}
+    for label in ("word", "chineseWord"):
+        word_path = paths[label]
+        if not word_path.is_file():
+            continue
+        check = inspect_word(word_path)
+        word_checks[label] = check
+        if check.get("error"):
+            errors.append(str(check["error"]))
+            continue
+        if check.get("mediaCount") != IMAGE_COUNT:
+            errors.append(f"{word_path.name} must contain exactly three images")
+        if check.get("missingImageAlt"):
+            errors.append(f"{word_path.name} contains image(s) without accessible alt text")
+        if check.get("forbiddenBrandAbbreviation"):
+            errors.append(f"{word_path.name} contains the forbidden customer-facing abbreviation ERH")
+        if check.get("productUrls") != distinct_products:
+            errors.append(
+                f"{word_path.name} product-link set does not match the Shopify HTML product-link set"
+            )
+
     if len(meta.get("researchSources", [])) < 2:
         errors.append("Expected at least two authority sources")
     if len(meta.get("backlinkPlan", [])) < 2:
         errors.append("Expected at least two reverse-link tasks")
+    meta_internal_links = meta.get("internalLinks", [])
+    for url in distinct_products:
+        matches = [
+            item for item in meta_internal_links
+            if isinstance(item, dict) and item.get("url") == url
+        ]
+        if not matches:
+            errors.append(f"Missing metadata verification record for product link: {url}")
+            continue
+        record = matches[0]
+        if record.get("verified") is not True or not record.get("verifiedAt") or not record.get("visibleH1"):
+            errors.append(
+                f"Product-link metadata must include verified=true, verifiedAt, and visibleH1: {url}"
+            )
+    image_plan = meta.get("imagePlan", [])
+    if len(image_plan) != IMAGE_COUNT:
+        errors.append(f"Expected three image-plan records; found {len(image_plan)}")
+    for index, record in enumerate(image_plan, start=1):
+        if not isinstance(record, dict):
+            errors.append(f"Image-plan record {index} is not an object")
+            continue
+        for field in ("file", "purpose", "alt", "sourcePage", "usageBasis"):
+            if not str(record.get(field, "")).strip():
+                errors.append(f"Image-plan record {index} is missing {field}")
     seo = meta.get("seo", {})
     seo_title_chars = len(str(seo.get("title", "")))
     meta_description_chars = len(str(seo.get("metaDescription", "")))
@@ -182,8 +279,8 @@ def main() -> int:
         errors.append("Visible publication lacks the exact approval phrase")
 
     image_manifest = publish.get("images", [])
-    if len(image_manifest) != 6:
-        errors.append(f"Expected six manifest images; found {len(image_manifest)}")
+    if len(image_manifest) != IMAGE_COUNT:
+        errors.append(f"Expected three manifest images; found {len(image_manifest)}")
     optimized_bytes = 0
     featured_dimensions: dict[str, int] = {}
     for index, record in enumerate(image_manifest, start=1):
@@ -219,22 +316,25 @@ def main() -> int:
             )
         if index == 1:
             featured_dimensions = {"width": actual_width, "height": actual_height}
-            if actual_width != actual_height * 2:
+            if (actual_width, actual_height) != (FEATURED_WIDTH, FEATURED_HEIGHT):
                 errors.append(
-                    f"Featured image must be exact 2:1; found {actual_width}x{actual_height}: {path.name}"
+                    f"Featured image must be exactly {FEATURED_WIDTH}x{FEATURED_HEIGHT}; "
+                    f"found {actual_width}x{actual_height}: {path.name}"
                 )
-        elif actual_width <= actual_height:
+        elif (actual_width, actual_height) != (BODY_WIDTH, BODY_HEIGHT):
             errors.append(
-                f"Body image {index} must be landscape-oriented; "
+                f"Body image {index} must be exactly {BODY_WIDTH}x{BODY_HEIGHT}; "
                 f"found {actual_width}x{actual_height}: {path.name}"
             )
 
     layout_reference = publish.get("layoutReference", {})
     if layout_reference and layout_reference.get("featuredAspectRatio") not in {None, "2:1"}:
         errors.append("Publication layout reference must use featuredAspectRatio 2:1")
+    if layout_reference and layout_reference.get("bodyAspectRatio") not in {None, "3:2"}:
+        errors.append("Publication layout reference must use bodyAspectRatio 3:2")
 
     report = {
-        "schemaVersion": "erh-blog-validation-2.0.0",
+        "schemaVersion": "erh-blog-validation-2.1.0",
         "passed": not errors,
         "slug": slug,
         "html": html_path.name,
@@ -245,6 +345,7 @@ def main() -> int:
             "shopifyH5": article.tags.count("h5"),
             "bodyImages": len(article.images),
             "manifestImages": len(image_manifest),
+            "imageSourceType": image_source_type,
             "featuredImageDimensions": featured_dimensions,
             "featuredImageExact2to1": bool(
                 featured_dimensions
@@ -259,6 +360,7 @@ def main() -> int:
             "metaDescriptionCharacters": meta_description_chars,
             "optimizedImageBytes": optimized_bytes,
             "unsafeHtmlFindings": len(article.errors),
+            "word": word_checks,
         },
         "verifiedProductUrls": distinct_products,
         "errors": errors,

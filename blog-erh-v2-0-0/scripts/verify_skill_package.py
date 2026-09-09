@@ -20,10 +20,12 @@ REQUIRED = (
     "references/shopify-browser-workflow.md",
     "references/shopify-output-contract.md",
     "references/site-config.md",
+    "references/v10-output-standard.md",
     "scripts/build_review_docx.py",
     "scripts/build_shopify_bundle.py",
     "scripts/check_runtime.py",
     "scripts/finalize_shopify_images.py",
+    "scripts/render_review_docx.py",
     "scripts/validate_blog_package.py",
 )
 
@@ -50,7 +52,7 @@ def main() -> int:
             errors.append(f"invalid profile JSON: {exc}")
         else:
             expected = {
-                "schemaVersion": "2.0.0",
+                "schemaVersion": "2.1.0",
                 "brand": "Elite Range Hood",
                 "publicBrandName": "Elite Range Hood",
                 "customerFacingAbbreviationAllowed": False,
@@ -58,10 +60,18 @@ def main() -> int:
                 "shopifyStoreHandle": "97256c-fc",
                 "targetBlog": "News",
                 "minimumProductLinks": 2,
-                "imageCount": 6,
+                "outputStandard": "v10-real-project-linked-word-html",
+                "primaryReviewFormat": "english-word-and-shopify-html",
+                "linkInsertionStage": "local-review-package",
+                "imageCount": 3,
+                "bodyImageCount": 2,
+                "imageSourcePreference": "approved-real-project-photography",
                 "featuredImageAspectRatio": "2:1",
                 "featuredImageReferenceWidth": 1774,
                 "featuredImageReferenceHeight": 887,
+                "bodyImageAspectRatio": "3:2",
+                "bodyImageReferenceWidth": 1536,
+                "bodyImageReferenceHeight": 1024,
                 "bodyImageFixedDimensionsAllowed": False,
                 "existingArticleUpdateMode": "update-by-verified-article-id",
                 "publicationApprovalPhrase": "审核通过并发布",
@@ -79,6 +89,9 @@ def main() -> int:
         "审核通过并发布",
         "color:#000000;text-decoration:underline;",
         "exact `2:1` ratio",
+        "exact `3:2` ratio",
+        "linked English Word review document",
+        "Word and HTML must contain the same verified product-link set",
         "never create a second article",
         "Do not publish the abbreviation `ERH`",
     ):

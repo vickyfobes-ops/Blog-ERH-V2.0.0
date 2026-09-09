@@ -24,7 +24,7 @@ def main() -> int:
     args = parser.parse_args()
     root = args.dir.expanduser().resolve()
     mapping = json.loads(args.mapping_json.expanduser().read_text(encoding="utf-8"))
-    required = {f"SHOPIFY_IMAGE_{i}_URL" for i in range(2, 7)}
+    required = {f"SHOPIFY_IMAGE_{i}_URL" for i in range(2, 4)}
     if set(mapping) != required:
         raise ValueError(f"Mapping keys must be exactly {sorted(required)}")
     if any(not valid_shopify_image(str(value)) for value in mapping.values()):

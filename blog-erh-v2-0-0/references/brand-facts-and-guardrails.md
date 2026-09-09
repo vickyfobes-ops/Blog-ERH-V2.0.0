@@ -60,6 +60,7 @@ Use one funnel label: Awareness, Consideration, Decision, or Ownership. Define o
 - excerpt distinct from the meta description;
 - featured-image brief and alt text;
 - verified outgoing internal-link plan;
+- linked English Word document and linked Shopify HTML generated from the same source;
 - two to five reverse-link tasks when practical;
 - source log and fact notes;
 - clean Markdown or Shopify-safe HTML, as requested.
@@ -67,3 +68,5 @@ Use one funnel label: Awareness, Consideration, Decision, or Ownership. Define o
 ## Publication boundary
 
 Default to local drafts. Do not connect to or write to Shopify without explicit authorization for the exact online action. A request to write a blog, make it publication-ready, or produce Shopify HTML is not authorization to publish.
+
+Verified contextual internal links belong in the local review package. Their presence does not authorize a Shopify write.

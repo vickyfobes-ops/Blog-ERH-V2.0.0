@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a theme-aligned Elite Range Hood Shopify package from six-image Markdown."""
+"""Build a V10 theme-aligned Elite Range Hood package from three-image Markdown."""
 
 from __future__ import annotations
 
@@ -21,8 +21,11 @@ INLINE_RE = re.compile(
     r"`([^`]+)`"
 )
 PRODUCT_LINK_STYLE = "color:#000000;text-decoration:underline;"
-FEATURED_ASPECT_WIDTH = 2
-FEATURED_ASPECT_HEIGHT = 1
+FEATURED_WIDTH = 1774
+FEATURED_HEIGHT = 887
+BODY_WIDTH = 1536
+BODY_HEIGHT = 1024
+IMAGE_COUNT = 3
 FORBIDDEN_PUBLIC_BRAND_ABBREVIATION = re.compile(r"(?<![A-Za-z0-9_-])ERH(?![A-Za-z0-9_-])")
 
 
@@ -73,14 +76,14 @@ def optimize_images(root: Path, records: list[tuple[str, str]]) -> list[dict]:
         with Image.open(source) as image:
             rgb = image.convert("RGB")
             width, height = rgb.size
-            if index == 1 and width * FEATURED_ASPECT_HEIGHT != height * FEATURED_ASPECT_WIDTH:
+            if index == 1 and (width, height) != (FEATURED_WIDTH, FEATURED_HEIGHT):
                 raise ValueError(
-                    f"Featured image must be exact 2:1 before Shopify upload; "
+                    f"Featured image must be exactly {FEATURED_WIDTH}x{FEATURED_HEIGHT} before Shopify upload; "
                     f"found {width}x{height}: {relative_path}"
                 )
-            if index > 1 and width <= height:
+            if index > 1 and (width, height) != (BODY_WIDTH, BODY_HEIGHT):
                 raise ValueError(
-                    f"Elite Range Hood body images must be landscape-oriented; "
+                    f"Elite Range Hood V10 body images must be exactly {BODY_WIDTH}x{BODY_HEIGHT}; "
                     f"found {width}x{height}: {relative_path}"
                 )
             rgb.save(target, "WEBP", quality=82, method=6)
@@ -148,8 +151,7 @@ def markdown_to_shopify(markdown: str, images: list[dict]) -> str:
                 output.append(
                     '<p><img '
                     f'src="SHOPIFY_IMAGE_{image_index}_URL" '
-                    f'alt="{html.escape(record["alt"], quote=True)}" '
-                    'loading="lazy"></p>'
+                    f'alt="{html.escape(record["alt"], quote=True)}"></p>'
                 )
                 if caption_text:
                     output.append(f"<p><em>{render_inline(caption_text)}</em></p>")
@@ -181,8 +183,8 @@ def markdown_to_shopify(markdown: str, images: list[dict]) -> str:
             paragraph.append(stripped)
             index += 1
     flush()
-    if image_index != 6:
-        raise ValueError(f"Expected six processed images, found {image_index}")
+    if image_index != IMAGE_COUNT:
+        raise ValueError(f"Expected {IMAGE_COUNT} processed images, found {image_index}")
     return "\n".join(output) + "\n"
 
 
@@ -243,8 +245,19 @@ def main() -> int:
             + ", ".join(forbidden_surfaces)
         )
     image_records = re.findall(r"!\[([^\]]*)\]\(([^)]+)\)", markdown)
-    if len(image_records) != 6 or any(not alt.strip() for alt, _ in image_records):
-        raise ValueError("Exactly six images with non-empty alt text are required")
+    if len(image_records) != IMAGE_COUNT or any(not alt.strip() for alt, _ in image_records):
+        raise ValueError("Exactly three images with non-empty alt text are required")
+    image_source_type = str(meta.get("imageSourceType", ""))
+    allowed_image_source_types = {
+        "approved-real-project-photography",
+        "mixed-approved-and-generated",
+        "ai-generated-design-visualizations",
+    }
+    if image_source_type not in allowed_image_source_types:
+        raise ValueError(
+            "meta.imageSourceType must be one of: "
+            + ", ".join(sorted(allowed_image_source_types))
+        )
     manifest = optimize_images(root, image_records)
     body_html = markdown_to_shopify(markdown, manifest)
     html_path = root / f"{slug}.shopify.html"
@@ -253,7 +266,7 @@ def main() -> int:
     preview_path.write_text(build_preview(body_html, meta, manifest), encoding="utf-8")
     seo = meta["seo"]
     publish = {
-        "schemaVersion": "erh-shopify-publish-2.0.0",
+        "schemaVersion": "erh-shopify-publish-2.1.0",
         "state": "requires-shopify-image-upload",
         "storeHandle": "97256c-fc",
         "storeDomain": "97256c-fc.myshopify.com",
@@ -273,13 +286,16 @@ def main() -> int:
         "bodyHtml": html_path.name,
         "localThemePreview": preview_path.name,
         "images": manifest,
-        "imageUrlPlaceholders": [f"SHOPIFY_IMAGE_{i}_URL" for i in range(2, 7)],
+        "imageSourceType": image_source_type,
+        "imageUrlPlaceholders": [f"SHOPIFY_IMAGE_{i}_URL" for i in range(2, IMAGE_COUNT + 1)],
         "layoutReference": {
             "url": "https://eliterangehood.com/blogs/news/the-value-of-handmade-in-a-mass-produced-world",
             "desktopHeroWidthPx": 1140,
             "desktopBodyWidthPx": 760,
             "featuredAspectRatio": "2:1",
             "featuredReferenceSizePx": {"width": 1774, "height": 887},
+            "bodyAspectRatio": "3:2",
+            "bodyReferenceSizePx": {"width": 1536, "height": 1024},
             "bodyImageSizing": "responsive-natural-height",
             "bodyHeadingMap": {"markdownH2": "shopifyH4", "markdownH3": "shopifyH5"},
         },

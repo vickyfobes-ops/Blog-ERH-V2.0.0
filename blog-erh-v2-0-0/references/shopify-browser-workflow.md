@@ -30,10 +30,10 @@ Before a Shopify write, visibly confirm:
 - author `YMQ`, unless the user approved another public author;
 - theme template `Default blog post`;
 - handle does not collide with another article;
-- six final WebP images and accurate alt text;
+- three final WebP images and accurate alt text;
 - at least two live, relevant `eliterangehood.com/products/...` destinations;
 - body HTML has no H1, scripts, Liquid, iframe, event handlers, or unresolved image placeholders.
-- the featured file is exactly `2:1`, the five body images have no fixed HTML dimensions, and all six passed full-frame visual QA;
+- the featured file is exactly `2:1`, both `3:2` body images have no fixed HTML dimensions, and all three passed full-frame visual QA;
 - whether the package already has a recorded Shopify article ID or an existing exact handle/title match.
 
 ## Create-versus-update guard
@@ -46,13 +46,13 @@ Search in this order before opening **Add blog post**:
 
 If any verified match represents the same package, reopen and update that article. Never create a duplicate to repair an image, crop, link, excerpt, or SEO field. If different records appear to share the handle or intent, stop before writing and report the collision.
 
-For a scoped correction to a published article, record the permitted fields before editing. Change only those fields and confirm that body HTML, five body-image URLs, links, SEO, author, blog, template, and visibility remain unchanged unless the operator explicitly requested otherwise.
+For a scoped correction to a published article, record the permitted fields before editing. Change only those fields and confirm that body HTML, two body-image URLs, links, SEO, author, blog, template, and visibility remain unchanged unless the operator explicitly requested otherwise.
 
 ## Image upload
 
-Upload only the six reviewed article images. Use one featured image and five Shopify-hosted body images. Choose each upload by its exact filename or direct local path; before selecting **Done**, confirm the selected checkbox, thumbnail, filename, and alt text so an adjacent media item cannot be substituted. Record the resulting Shopify URLs in the publication manifest. Never leave local paths or `SHOPIFY_IMAGE_*_URL` placeholders in saved body HTML.
+Upload only the three reviewed article images. Use one featured image and two Shopify-hosted body images. Choose each upload by its exact filename or direct local path; before selecting **Done**, confirm the selected checkbox, thumbnail, filename, and alt text so an adjacent media item cannot be substituted. Record the resulting Shopify URLs in the publication manifest. Never leave local paths or `SHOPIFY_IMAGE_*_URL` placeholders in saved body HTML.
 
-The featured source must be exact `2:1`. The five body-image tags must omit fixed `width` and `height` attributes so the theme can render them responsively with natural height.
+The featured source must be exact `2:1`. Both body sources must be exact `3:2`, and their tags must omit fixed `width` and `height` attributes so the theme can render them responsively with natural height.
 
 ## Hidden draft test
 
@@ -76,7 +76,7 @@ After `审核通过并发布`:
 1. Reverify the exact reviewed package and all publication fields.
 2. Reverify at least two relevant live product pages.
 3. Confirm the final body includes two or more contextual product links styled `color:#000000;text-decoration:underline;`.
-4. Upload/resolve all six images and rerun package validation.
+4. Upload/resolve all three images and rerun package validation.
 5. Set Visibility to `Visible` only after all fields are correct.
 6. Save and wait for Shopify's success state.
 7. Open the public article, not only the admin editor.

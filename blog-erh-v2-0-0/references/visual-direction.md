@@ -2,7 +2,7 @@
 
 ## Default image system
 
-Use visually rich residential kitchen scenes, not isolated object studies. Show enough of the room to judge cabinetry, ceiling, cooking appliance, counters, lighting, traffic space, and the hood's architectural scale.
+Use approved, brand-owned Elite Range Hood project photography whenever suitable images exist. Show enough of the room to judge cabinetry, ceiling, cooking appliance, counters, lighting, traffic space, and the hood's architectural scale.
 
 Prioritize:
 
@@ -24,24 +24,21 @@ Unless the user explicitly requests a technical illustration, do not generate:
 - anatomy labels or engineering details that are not documented by the exact Elite Range Hood product;
 - a competitor logo, watermark, product photo, or distinctive composition.
 
-## Product references
+## Product references and provenance
 
-Inspect current Elite Range Hood product pages or approved Elite Range Hood images before describing or visualizing a named model. Use competitor sites only to understand category presentation and market conventions, never as a source of Elite Range Hood facts or image assets.
+Inspect current Elite Range Hood product pages, published project articles, or approved Elite Range Hood image libraries before selecting or visualizing a named model. Record the source page and usage basis for each selected image. Use competitor sites only to understand category presentation and market conventions, never as a source of Elite Range Hood facts or image assets.
 
 If a generated hood only references an exterior profile, say so. Do not call it the exact model or customer project. Do not imply that a generated kitchen is an installed Elite Range Hood project.
 
-## Standard six-image package
+## Standard V10 three-image package
 
-Before generation, map each image to one named article section, one reader question, and one caption. Reject any image whose only purpose is decoration. For a full buying or design guide, prefer:
+Before selection or generation, map each image to one named article section, one reader question, and one caption. Reject any image whose only purpose is decoration. Use exactly:
 
-1. Featured image: complete aspirational kitchen with the article's primary hood concept.
-2. Proportion scene: another kitchen illustrating visual scale or mounting context.
-3. Material scene: a full kitchen emphasizing one metal and finish.
-4. Selection scene: finish samples or design materials photographed in a residential setting.
-5. Silhouette scene: a contrasting architectural form in a different kitchen style.
-6. Craft scene: a full kitchen where straps, rivets, apron, crown, hammering, or trim can be inspected.
+1. Featured image: an approved project photograph that communicates the article's primary design decision, prepared at exactly `1774 × 887` (`2:1`).
+2. Body image: an approved project photograph supporting a sizing, proportion, installation, or other topic-specific decision, prepared at exactly `1536 × 1024` (`3:2`).
+3. Body image: an approved project photograph supporting a material, silhouette, craftsmanship, ownership, or other topic-specific decision, prepared at exactly `1536 × 1024` (`3:2`).
 
-Vary kitchen style, cabinetry color, materials, and lighting while maintaining a coherent premium residential aesthetic. Avoid six near-duplicate rooms.
+Vary room, viewpoint, or decision value while maintaining a coherent premium residential aesthetic. Avoid near-duplicate views.
 
 ## Featured-image frame and crop safety
 
@@ -57,22 +54,24 @@ Keep these decision-critical elements inside the full `2:1` frame:
 
 Leave comfortable space around the hood. Do not place the crown, apron, or appliance against the frame edge. If the source cannot fit without losing an essential element, regenerate the composition. A technically complete file that visually cuts off the product still fails review.
 
-Body images should be landscape-oriented and must retain their natural aspect ratio in Shopify. Body HTML must not include fixed `width` or `height` attributes.
+Body images must be exact `3:2` and retain that aspect ratio in Shopify. Body HTML must not include fixed `width` or `height` attributes.
+
+When adapting real project photography, use proportional crops and scaling. Never redraw, shorten, stretch, flatten, or fabricate the hood or room. Do not use fixed-height wrappers or `object-fit: fill`.
 
 ## Visual QA
 
-Inspect each final file at full frame before review and inspect the rendered article after Shopify save. Confirm:
+Inspect each of the three final files at full frame before review and inspect the rendered article after Shopify save. Confirm:
 
 - the image supports its assigned section and caption;
 - the hood geometry is plausible and structurally consistent;
 - crowns, aprons, straps, rivets, cabinet doors, ranges, and hardware are not malformed;
 - no hood, appliance, drawing, sample, or other essential element is unintentionally cropped;
 - no competitor logo, watermark, copied product image, or misleading Elite Range Hood project claim appears;
-- the six images add distinct information rather than repeating one room or silhouette.
+- the three images add distinct information rather than repeating one room or silhouette.
 
 ## Disclosure and captions
 
-Include one clear early disclosure when generated visuals are used, for example:
+Authentic Elite Range Hood project photography does not need an AI disclosure. Include one clear early disclosure only when generated visuals are used, for example:
 
 `The kitchen interiors in this guide are AI-generated design visualizations, not customer-project photography.`
 

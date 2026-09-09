@@ -6,6 +6,7 @@
 - Fixed `News` destination, approved author, theme formatting, and homepage module.
 - Research, writing, translation, SEO, image, product-link, layout, validation, upload, publication, and verification rules.
 - Cross-platform scripts and Windows/macOS browser-control setup.
+- The V10 local-output contract: linked English Word and Shopify HTML plus one featured and two body images.
 
 ## Never include or request
 

@@ -25,6 +25,8 @@ On Windows PowerShell, replace `python3` with `py -3` and `~` with `$env:USERPRO
 
 Restart the desktop app or start a new Codex task so the Skill appears.
 
+For local generation only, no Shopify login or browser plugin is required. After entering one topic, the Skill can produce the linked English Word document, linked Shopify HTML, Chinese review copy, and V10 three-image package locally. The remaining browser setup is needed only for an explicitly authorized Shopify upload or publication.
+
 ## Enable Chrome control
 
 1. Open the desktop app and select Codex, or ChatGPT Work.
@@ -63,6 +65,8 @@ Successful read-only confirmation means browser control and authentication are r
 ```text
 使用 $blog-erh-v2-0-0，选题是：How to Choose a Custom Range Hood
 ```
+
+Expected local primary outputs are `<handle>.review.docx` and `<handle>.shopify.html`, with the same verified contextual product links and one `2:1` featured image plus two `3:2` body images.
 
 After reviewing the generated package, authorize publication only with:
 

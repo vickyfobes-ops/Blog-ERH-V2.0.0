@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
-"""Build polished Elite Range Hood English and Chinese Word review drafts from Markdown."""
+"""Build V10 linked Elite Range Hood English and Chinese Word reviews from Markdown."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import re
+import sys
 from datetime import date
+from io import BytesIO
 from pathlib import Path
 from urllib.parse import urlparse
 
+from PIL import Image
 from docx import Document
 from docx.enum.section import WD_SECTION_START
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_TABLE_ALIGNMENT
@@ -27,6 +30,8 @@ BRONZE = "333333"
 LIGHT_FILL = "F4F6F9"
 RULE = "D8DEE5"
 TABLE_WIDTH_DXA = 9360
+IMAGE_COUNT = 3
+FORBIDDEN_PUBLIC_BRAND_ABBREVIATION = re.compile(r"(?<![A-Za-z0-9_-])ERH(?![A-Za-z0-9_-])")
 
 
 def set_cell_shading(cell, fill: str) -> None:
@@ -243,8 +248,11 @@ def apply_numbering(paragraph, num_id: int) -> None:
 def configure_styles(document, language: str) -> tuple[str, str]:
     # Use font names available in Microsoft Word on both Windows and macOS.
     # East Asian fallback remains explicit so Chinese text is not rendered as tofu.
-    font_name = "Microsoft YaHei" if language.startswith("zh") else "Calibri"
-    east_asia = "Microsoft YaHei" if language.startswith("zh") else font_name
+    if language.startswith("zh"):
+        font_name = "Arial Unicode MS" if sys.platform == "darwin" else "Microsoft YaHei"
+    else:
+        font_name = "Calibri"
+    east_asia = font_name
     styles = document.styles
     normal = styles["Normal"]
     normal.font.name = font_name
@@ -259,6 +267,22 @@ def configure_styles(document, language: str) -> tuple[str, str]:
     pf.space_after = Pt(8)
     pf.line_spacing = 1.333
     pf.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+    title = styles["Title"]
+    title.font.name = font_name
+    title.font.size = Pt(26)
+    title.font.bold = True
+    title.font.color.rgb = RGBColor.from_string("000000")
+    title_fonts = title.element.get_or_add_rPr().get_or_add_rFonts()
+    title_fonts.set(qn("w:ascii"), font_name)
+    title_fonts.set(qn("w:hAnsi"), font_name)
+    title_fonts.set(qn("w:eastAsia"), east_asia)
+    title.paragraph_format.space_before = Pt(0)
+    title.paragraph_format.space_after = Pt(8)
+    title_ppr = title.element.get_or_add_pPr()
+    title_border = title_ppr.find(qn("w:pBdr"))
+    if title_border is not None:
+        title_ppr.remove(title_border)
 
     heading_tokens = {
         "Heading 1": (16, BLUE, 18, 10, 0),
@@ -348,7 +372,7 @@ def add_review_front_matter(document, title: str, meta: dict, language: str,
     run = kicker.add_run("第一步 · 文章审阅" if zh else "STEP 1 · EDITORIAL REVIEW")
     set_font(run, font_name, 9.5, BRONZE, bold=True, east_asia=east_asia)
 
-    p = document.add_paragraph()
+    p = document.add_paragraph(style="Title")
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_after = Pt(8)
     p.paragraph_format.keep_with_next = True
@@ -367,22 +391,12 @@ def add_review_front_matter(document, title: str, meta: dict, language: str,
     note.paragraph_format.left_indent = Inches(0.18)
     note.paragraph_format.right_indent = Inches(0.18)
     text = (
-        "审阅说明：本文正文、6 张配图、来源与 FAQ 已完成。你确认后，第三步才会加入已验证商品内链并生成 Shopify 安全格式。"
+        "审阅说明：完整正文、3 张配图、权威来源和已验证的 Elite Range Hood 内链已同步到 Word 与 HTML。尚未写入 Shopify。"
         if zh else
-        "Review status: article, six images, sources, and FAQ are complete. Verified product links and Shopify-safe formatting are added only in Action 3 after approval."
+        "Review status: the complete article, three images, authority sources, and verified Elite Range Hood internal links are synchronized in Word and HTML. Nothing has been written to Shopify."
     )
     run = note.add_run(text)
     set_font(run, font_name, 10, DARK_BLUE, bold=True, east_asia=east_asia)
-    ppr = note._p.get_or_add_pPr()
-    p_bdr = OxmlElement("w:pBdr")
-    left = OxmlElement("w:left")
-    left.set(qn("w:val"), "single")
-    left.set(qn("w:sz"), "18")
-    left.set(qn("w:space"), "10")
-    left.set(qn("w:color"), BRONZE)
-    p_bdr.append(left)
-    ppr.append(p_bdr)
-
     seo = meta.get("seo", {})
     rows = (
         [
@@ -427,8 +441,27 @@ def markdown_word_count(markdown: str) -> int:
     return len(re.findall(r"\b[\w’'-]+\b", text))
 
 
+def is_product_url(url: str) -> bool:
+    parsed = urlparse(url)
+    host = (parsed.hostname or "").lower().removeprefix("www.")
+    return host == "eliterangehood.com" and parsed.path.startswith("/products/")
+
+
+def validate_word_source(markdown: str, label: str) -> None:
+    images = re.findall(r"!\[([^\]]*)\]\(([^\)]+)\)", markdown)
+    if len(images) != IMAGE_COUNT or any(not alt.strip() for alt, _ in images):
+        raise ValueError(f"{label} must contain exactly three images with non-empty alt text")
+    links = re.findall(r"\[[^\]]+\]\((https?://[^\)]+)\)", markdown)
+    products = {url for url in links if is_product_url(url)}
+    if len(products) < 2:
+        raise ValueError(f"{label} must contain at least two distinct Elite Range Hood product links")
+    if FORBIDDEN_PUBLIC_BRAND_ABBREVIATION.search(markdown):
+        raise ValueError(f"{label} contains the forbidden customer-facing abbreviation ERH")
+
+
 def build(markdown_path: Path, meta_path: Path, output_path: Path, language: str) -> Path:
     markdown = markdown_path.read_text(encoding="utf-8")
+    validate_word_source(markdown, markdown_path.name)
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
     lines = re.sub(r"<!--.*?-->", "", markdown, flags=re.S).splitlines()
     title_match = re.search(r"^#\s+(.+)$", markdown, flags=re.M)
@@ -490,7 +523,14 @@ def build(markdown_path: Path, meta_path: Path, output_path: Path, language: str
             p.paragraph_format.keep_with_next = True
             p.paragraph_format.keep_together = True
             run = p.add_run()
-            inline_shape = run.add_picture(str(image_path), width=Inches(6.0))
+            if image_path.suffix.lower() == ".webp":
+                converted = BytesIO()
+                with Image.open(image_path) as source_image:
+                    source_image.convert("RGB").save(converted, format="PNG")
+                converted.seek(0)
+                inline_shape = run.add_picture(converted, width=Inches(6.0))
+            else:
+                inline_shape = run.add_picture(str(image_path), width=Inches(6.0))
             # Preserve the Markdown alt text in the DOCX drawing metadata so
             # Word's accessibility tools and screen readers can describe it.
             alt_text = image.group(1).strip() or image_path.stem.replace("-", " ")
@@ -514,7 +554,7 @@ def build(markdown_path: Path, meta_path: Path, output_path: Path, language: str
     flush()
 
     document.core_properties.title = title
-    document.core_properties.subject = "Elite Range Hood Shopify blog review draft"
+    document.core_properties.subject = "Elite Range Hood linked Word and Shopify HTML review draft"
     document.core_properties.author = "Elite Range Hood"
     document.core_properties.comments = "Review draft; not uploaded to Shopify."
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -532,7 +572,7 @@ def main() -> int:
     chinese = next(root.glob("*.zh-CN.md"))
     slug = english.stem
     outputs = [
-        build(english, meta, root / f"{slug}.en.review.docx", "en-US"),
+        build(english, meta, root / f"{slug}.review.docx", "en-US"),
         build(chinese, meta, root / f"{slug}.zh-CN.review.docx", "zh-CN"),
     ]
     print("\n".join(str(path) for path in outputs))

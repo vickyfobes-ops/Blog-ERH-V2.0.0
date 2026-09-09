@@ -26,7 +26,9 @@ Do not silently switch author, blog, or template. Reverify them in the article e
 
 ## Live article format
 
-Reference article: `https://eliterangehood.com/blogs/news/the-value-of-handmade-in-a-mass-produced-world`
+Theme reference article: `https://eliterangehood.com/blogs/news/the-value-of-handmade-in-a-mass-produced-world`
+
+V10 content reference: `custom-range-hood-buying-guide.shopify.manual-replace-v10.html` from the approved local review package. Its contract is captured in `references/v10-output-standard.md`; the portable Skill does not depend on the original local file being present.
 
 - The theme renders breadcrumb, featured image, author/date, article title, share controls, footer metadata, and previous/next navigation.
 - Desktop featured-image width observed: about 1140 px.
@@ -36,6 +38,7 @@ Reference article: `https://eliterangehood.com/blogs/news/the-value-of-handmade-
 - Existing body section headings are H4; nested FAQ headings should use H5.
 - Use plain `<p><img ...></p>` for body images; the current article pattern does not depend on `<figure>` or inline tables.
 - Omit fixed `width` and `height` attributes from body-image tags; the theme constrains width and the browser must preserve natural height.
+- The V10 standard uses two body images at `1536 × 1024` (`3:2`) and one featured image at `1774 × 887` (`2:1`).
 - Keep external authority sources in a final visible `Sources and Technical References` section.
 
 ## Homepage blog module
