@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -18,10 +19,11 @@ def find_renderer() -> Path:
             return path
         raise FileNotFoundError(f"CODEX_DOCUMENT_RENDERER does not exist: {path}")
 
-    root = Path.home() / ".codex" / "plugins" / "cache" / "openai-primary-runtime" / "documents"
+    codex_root = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex").expanduser()
+    root = codex_root / "plugins" / "cache" / "openai-primary-runtime" / "documents"
     candidates = sorted(
         root.glob("*/skills/documents/render_docx.py"),
-        key=lambda path: path.parent.parent.parent.parent.name,
+        key=lambda path: tuple(int(part) for part in re.findall(r"\d+", path.parents[3].name)),
         reverse=True,
     )
     if not candidates:

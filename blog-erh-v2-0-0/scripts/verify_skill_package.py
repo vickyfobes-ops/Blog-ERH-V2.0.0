@@ -11,11 +11,13 @@ from pathlib import Path
 
 REQUIRED = (
     "SKILL.md",
+    "requirements.txt",
     "agents/openai.yaml",
     "assets/elite-range-hood.json",
     "assets/shopify-blog-draft.md",
     "references/brand-facts-and-guardrails.md",
     "references/operator-setup.md",
+    "references/local-build.md",
     "references/security-and-handoff.md",
     "references/shopify-browser-workflow.md",
     "references/shopify-output-contract.md",
@@ -24,6 +26,7 @@ REQUIRED = (
     "scripts/build_review_docx.py",
     "scripts/build_shopify_bundle.py",
     "scripts/check_runtime.py",
+    "scripts/install_local.py",
     "scripts/finalize_shopify_images.py",
     "scripts/render_review_docx.py",
     "scripts/validate_blog_package.py",

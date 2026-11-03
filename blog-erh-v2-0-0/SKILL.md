@@ -25,6 +25,8 @@ Read these for every run:
 
 Read `references/operator-setup.md` on a new computer or when browser control is unavailable. Read `references/shopify-browser-workflow.md` before any Shopify action. Read `references/security-and-handoff.md` before packaging or handing the Skill to another operator.
 
+Resolve bundled resources relative to this installed `SKILL.md`. Write article outputs in the operator's current workspace, never in the installed Skill directory. The original author's workspace and V10 HTML file are not required on another computer.
+
 ## Required capabilities and routing
 
 - Use internet research for current facts and authoritative sources.
@@ -35,11 +37,13 @@ Read `references/operator-setup.md` on a new computer or when browser control is
 - On Windows, keep Chrome visible on the active unlocked desktop while Computer Use runs. On macOS, follow the permissions requested by Computer Use.
 - Never switch to API-key automation, request credentials, inspect cookies, or export a browser profile.
 
-If neither Chrome control nor Computer Use is available, complete the local review package, then stop with the precise setup steps from `references/operator-setup.md`. Never claim that an upload occurred.
+Local Word, HTML, and image generation does not require Chrome control or Shopify authentication. Check browser setup only if the operator requests an online action. Never claim that an upload occurred when only local files were generated.
 
 ## First run on another operator's computer
 
 Installation carries the fixed non-secret Elite Range Hood store profile, content rules, scripts, and upload runbook. It does not and must not carry authentication.
+
+Before local generation, run `scripts/check_runtime.py` with the workspace Python runtime. If unavailable or missing packages, follow the isolated-environment fallback in `references/operator-setup.md`. Read `references/local-build.md` for input filenames, metadata fields, and script order.
 
 Before the first Shopify write:
 
@@ -147,4 +151,4 @@ Use:
 - `scripts/finalize_shopify_images.py` after Shopify provides hosted image URLs;
 - `scripts/validate_blog_package.py` before Shopify save and again before publication.
 
-Always report absolute artifact paths, validation results, verified product URLs, unchanged authority sources, Shopify article state, admin/public URLs, product-link click results, and homepage result. Never describe a local package or Hidden draft as published.
+For local delivery, report absolute artifact paths, validation results, and verified product URLs. After an authorized online action, also report Shopify article state, admin/public URLs, product-link click results, and homepage result. Never describe a local package or Hidden draft as published.

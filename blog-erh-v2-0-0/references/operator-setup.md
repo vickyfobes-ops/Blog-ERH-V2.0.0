@@ -8,7 +8,7 @@ Canonical repository: `https://github.com/vickyfobes-ops/Blog-ERH-V2.0.0`
 
 Ask Codex to use `$skill-installer` with repository `vickyfobes-ops/Blog-ERH-V2.0.0`, path `blog-erh-v2-0-0`, branch `main`, and installation name `blog-erh-v2-0-0`.
 
-The deterministic macOS/Linux installer command is:
+Resolve the bundled `$skill-installer` script from its installed location rather than assuming a fixed app path. A default macOS command is:
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
@@ -18,14 +18,32 @@ python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-githu
   --name blog-erh-v2-0-0
 ```
 
-On Windows PowerShell, replace `python3` with `py -3` and `~` with `$env:USERPROFILE`. Alternatively, copy the complete folder to:
+On Windows PowerShell, the equivalent default command is:
+
+```powershell
+py -3 "$env:USERPROFILE/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo vickyfobes-ops/Blog-ERH-V2.0.0 --path blog-erh-v2-0-0 --ref main --name blog-erh-v2-0-0
+```
+
+If `CODEX_HOME` is configured, resolve the installer and destination from that directory instead. The standard installer refuses an existing destination. For an update, use the standard installer with `--dest` pointing at a new temporary directory, then run the downloaded `blog-erh-v2-0-0/scripts/install_local.py --replace`. It validates the new package before moving the old version to `skill-backups` outside the discovered `skills` folder, and restores the old version if activation fails. Never delete the old directory first.
+
+For an extracted ZIP, run `python3 blog-erh-v2-0-0/scripts/install_local.py --replace` (Windows: `py -3` in place of `python3`). The script supports a custom skills parent through `--dest`. Default destinations:
 
 - Windows: `%USERPROFILE%\.codex\skills\blog-erh-v2-0-0`
 - macOS: `~/.codex/skills/blog-erh-v2-0-0`
 
-Restart the desktop app or start a new Codex task so the Skill appears.
+The Skill is available on the next Codex turn. If the current task still shows stale instructions, start a new task. Use the invocation alone after installation; do not repeatedly run the installation prompt.
 
 For local generation only, no Shopify login or browser plugin is required. After entering one topic, the Skill can produce the linked English Word document, linked Shopify HTML, Chinese review copy, and V10 three-image package locally. The remaining browser setup is needed only for an explicitly authorized Shopify upload or publication.
+
+## Local runtime
+
+1. Locate the workspace dependency Python runtime when provided by Codex. Run `scripts/check_runtime.py` with that interpreter before generation.
+2. If it is unavailable or lacks packages, create `.venv-erh` inside the article workspace using Python 3.10+ and install the Skill's `requirements.txt` there. Do not install dependencies globally.
+3. On macOS use `python3 -m venv .venv-erh`, then `.venv-erh/bin/python -m pip install -r <installed-skill>/requirements.txt`. On Windows use `py -3 -m venv .venv-erh`, then `.venv-erh/Scripts/python.exe -m pip install -r <installed-skill>/requirements.txt`.
+4. Re-run `check_runtime.py` with that interpreter. If Python is absent, state that concrete missing prerequisite.
+5. Use `references/local-build.md` for the data contract and build order. All input images are local files within the article output folder; no path on the author's computer is needed.
+
+The bundled Word builder works without a documents plugin. Visual QA still needs a DOCX renderer (prefer the available documents skill); `scripts/render_review_docx.py` accepts `CODEX_DOCUMENT_RENDERER` for a renderer installed outside its default discovery path. If rendering is unavailable, report visual QA as incomplete instead of claiming it passed.
 
 ## Enable Chrome control
 

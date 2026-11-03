@@ -16,9 +16,8 @@
 
 ## What each operator needs
 
-1. A supported Windows or macOS desktop app with this Skill installed.
-2. Chrome control enabled; Computer Use is an optional fallback.
-3. An authorized Shopify staff account for Elite Range Hood.
-4. A one-time Shopify sign-in in the same Chrome profile.
+1. A Codex environment with local Skill, file and command support, plus internet research access.
+2. Python 3.10+ with the packages in `requirements.txt` (prefer the bundled workspace runtime), and DOCX rendering for visual QA.
+3. Only for an authorized online action: Chrome control or Computer Use, an authorized Shopify staff account, and a Shopify sign-in on that computer.
 
 The Skill removes repeated store configuration; it cannot safely package authentication. Login, 2FA, CAPTCHA, and sensitive confirmations remain human steps.
