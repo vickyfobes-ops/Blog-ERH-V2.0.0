@@ -12,6 +12,7 @@ from pathlib import Path
 REQUIRED = (
     "SKILL.md",
     "requirements.txt",
+    "release.json",
     "agents/openai.yaml",
     "assets/elite-range-hood.json",
     "assets/shopify-blog-draft.md",
@@ -102,7 +103,7 @@ def main() -> int:
             errors.append(f"SKILL.md is missing required portable workflow text: {required_text}")
 
     for path in root.rglob("*"):
-        if not path.is_file() or ".git" in path.parts or path.suffix.lower() in {
+        if not path.is_file() or ".git" in path.parts or path.name.startswith("._") or path.suffix.lower() in {
             ".pyc", ".png", ".jpg", ".jpeg", ".webp", ".docx", ".zip"
         }:
             continue
@@ -117,6 +118,8 @@ def main() -> int:
         return 1
 
     print("PASS: Blog—ERH—V2.0.0 portable package")
+    release = json.loads((root / "release.json").read_text(encoding="utf-8"))
+    print(f"Package revision: {release['packageRevision']}")
     print("Platforms: Windows and macOS")
     print("Browser route: Chrome control; Computer Use fallback")
     print("Store: 97256c-fc / eliterangehood.com")

@@ -31,10 +31,12 @@ class InstallationTests(unittest.TestCase):
         cache = self.source / "scripts" / "__pycache__"
         cache.mkdir()
         (cache / "junk.pyc").write_bytes(b"cache")
+        (self.source / "._SKILL.md").write_bytes(b"network drive metadata")
         target, backup = installer.install(self.source, self.skills)
         self.assertIsNone(backup)
         self.assertTrue((target / "SKILL.md").is_file())
         self.assertFalse((target / "scripts" / "__pycache__").exists())
+        self.assertFalse((target / "._SKILL.md").exists())
         self.assertEqual((other / "keep.txt").read_text(), "unchanged")
 
     def test_update_requires_replace_and_retains_complete_previous_copy(self):
@@ -76,6 +78,13 @@ class InstallationTests(unittest.TestCase):
     def test_running_installed_script_is_a_noop(self):
         target, _ = installer.install(self.source, self.skills)
         result, backup = installer.install(target, self.skills, replace=True)
+        self.assertEqual(result, target)
+        self.assertIsNone(backup)
+        self.assertFalse((self.skills.parent / "skill-backups").exists())
+
+    def test_reinstalling_identical_package_does_not_create_backup(self):
+        target, _ = installer.install(self.source, self.skills)
+        result, backup = installer.install(self.source, self.skills, replace=True)
         self.assertEqual(result, target)
         self.assertIsNone(backup)
         self.assertFalse((self.skills.parent / "skill-backups").exists())

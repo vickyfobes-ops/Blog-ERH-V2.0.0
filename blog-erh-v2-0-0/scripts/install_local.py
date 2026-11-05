@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 from datetime import datetime, timezone
 import os
 from pathlib import Path
@@ -15,7 +16,20 @@ from uuid import uuid4
 
 
 NAME = "blog-erh-v2-0-0"
-IGNORE = shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".DS_Store")
+IGNORE = shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".DS_Store", "._*", "__MACOSX")
+
+
+def inventory(root: Path) -> dict[str, str]:
+    """Compare actual files, excluding transfer metadata and interpreter caches."""
+    result = {}
+    for current, directories, filenames in os.walk(root):
+        ignored = IGNORE(current, directories + filenames)
+        directories[:] = [name for name in directories if name not in ignored]
+        for name in filenames:
+            if name not in ignored:
+                path = Path(current) / name
+                result[path.relative_to(root).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return result
 
 
 def verify(source: Path) -> None:
@@ -40,6 +54,8 @@ def install(source: Path, skills_dir: Path, replace: bool = False) -> tuple[Path
         raise ValueError(f"Installation target is not a directory: {target}")
     if target.exists() and not replace:
         raise FileExistsError(f"Already installed: {target}. Use --replace to back up and update.")
+    if target.exists() and inventory(source) == inventory(target):
+        return target, None
 
     skills_dir.mkdir(parents=True, exist_ok=True)
     backup = None

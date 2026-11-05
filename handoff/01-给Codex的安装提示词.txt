@@ -1,0 +1,1 @@
+请安装当前文件夹里的 Elite Range Hood 博客 Skill：先运行 verify_package.py 校验交接包，再用可用的 Python 3.10+ 运行 blog-erh-v2-0-0/scripts/install_local.py --replace（已有版本先备份更新），然后验证已安装目录并检查文章生成依赖；优先使用 Codex 内置运行环境，缺少依赖时按 operator-setup.md 创建独立环境。完成后告诉我安装路径和调用方式。

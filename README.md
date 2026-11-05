@@ -2,6 +2,8 @@
 
 在另一台电脑的 Codex 中安装 `blog-erh-v2-0-0` 后，输入选题即可研究并生成带内链的英文 Word、Shopify HTML、中文审阅稿和 V10 标准三张图片。规则、模板和脚本都在本仓库；不需要原作者电脑上的文件或历史对话。
 
+当前交接修订版：`2026.11.04`（见 Skill 内 `release.json`）。安装名保持不变；更新时可直接覆盖旧版并保留备份。
+
 ## 复制一句话安装或更新
 
 把下面整句发给 Codex。未安装时安装；已安装时备份旧版并更新：
@@ -25,6 +27,8 @@
 ```text
 请安装这个文件夹中的 blog-erh-v2-0-0，运行其中的 scripts/install_local.py --replace；已有版本先备份，完成后验证安装。
 ```
+
+完整交接包还提供 `Install-macOS.command` 和 `Install-Windows.cmd`，可双击安装；建议先复制到本地再运行。安装前会核验包内文件哈希，重复安装完全相同的版本会直接通过。安装脚本会忽略移动硬盘和网络盘产生的 `._*` 元数据文件。
 
 也可在解压目录的终端手动运行：
 
@@ -50,3 +54,7 @@
 生成本地文件不需要 Shopify 登录。只有要求上传或发布时，才需要对方自己登录有权限的 Shopify 账户；发布仍需对当前稿件明确说“审核通过并发布”。
 
 详细说明：[跨电脑配置](blog-erh-v2-0-0/references/operator-setup.md) · [V10 输出标准](blog-erh-v2-0-0/references/v10-output-standard.md)。
+
+## 维护者打包
+
+在干净的已提交仓库中运行 `python3 tools/package_handoff.py --output <新建交付目录>`，生成完整 Skill、双系统安装入口、中文交接说明、ZIP 和 SHA-256 校验文件。内部交接可额外传入 `--reference-dir <原始V10文章目录>`，将已批准的 HTML、Word 和三张图按原样附入包内；这些内部样例不会自动加入 GitHub。

@@ -31,6 +31,8 @@ For an extracted ZIP, run `python3 blog-erh-v2-0-0/scripts/install_local.py --re
 - Windows: `%USERPROFILE%\.codex\skills\blog-erh-v2-0-0`
 - macOS: `~/.codex/skills/blog-erh-v2-0-0`
 
+The full handoff ZIP also provides `Install-macOS.command` and `Install-Windows.cmd`, with package integrity verification before installation. Copy the extracted folder to a local disk first. Identical reinstalls do not create duplicate backups; `._*` transfer metadata is ignored. Read `release.json` to identify the installed package revision.
+
 The Skill is available on the next Codex turn. If the current task still shows stale instructions, start a new task. Use the invocation alone after installation; do not repeatedly run the installation prompt.
 
 For local generation only, no Shopify login or browser plugin is required. After entering one topic, the Skill can produce the linked English Word document, linked Shopify HTML, Chinese review copy, and V10 three-image package locally. The remaining browser setup is needed only for an explicitly authorized Shopify upload or publication.
